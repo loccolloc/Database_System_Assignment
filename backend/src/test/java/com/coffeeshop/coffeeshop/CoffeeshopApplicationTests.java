@@ -1,10 +1,10 @@
-package db.webapp.backend;
+package com.coffeeshop.coffeeshop;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendApplicationTests {
+class CoffeeshopApplicationTests {
 
 	@Test
 	void contextLoads() {

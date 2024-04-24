@@ -1,26 +1,22 @@
-import React from "react";
-import Logo from "../../assets/website/coffee_logo.png";
+
 import { FaCoffee } from "react-icons/fa";
-import Hcmut from "../../assets/website/hcmutlog.png"
+import Hcmut from "../../assets/website/hcmutlog.png";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
 const Menu = [
   {
     id: 1,
     name: "Home",
     link: "/#",
   },
-  {
-    id: 2,
-    name: "Services",
-    link: "/#services",
-  },
-  {
-    id: 3,
-    name: "About",
-    link: "/#about",
-  },
+
  
 ];
 const Navbar = () => {
+  const navigate = useNavigate(); // Sử dụng hook useNavigate
+  const handleOrderClick = () => {
+    navigate('/login'); // Điều hướng sang trang Login
+  };
   return (
     <>
       <div className="bg-white from-secondary to-secondary/90 shadow-md bg-gray-900 text-white">
@@ -57,7 +53,10 @@ const Navbar = () => {
                   </li>
                 ))}
               </ul>
-              <button className="  bg-blue-800 hover:scale-105 duration-200 text-white px-4 py-2 rounded-full flex items-center gap-3">
+              <button
+                className="bg-blue-800 hover:scale-105 duration-200 text-white px-4 py-2 rounded-full flex items-center gap-3"
+                onClick={handleOrderClick} // Gọi hàm handleOrderClick khi nút được nhấp
+              >
                 Order
                 <FaCoffee className="text-xl text-white drop-shadow-sm cursor-pointer" />
               </button>
