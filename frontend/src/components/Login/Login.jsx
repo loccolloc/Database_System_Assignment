@@ -1,5 +1,5 @@
 
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import { useState,useEffect,useRef } from "react";
 import loginImg from '../../assets/trees.jpg'
 import axios from 'axios';
@@ -22,7 +22,7 @@ export default function Login() {
         setErrMsg('');
     }, [username, password]);
     const handleSignupClick = () => {
-        navigate('/signup'); // Điều hướng sang trang Login
+        navigate('/signup'); 
       };
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,7 +38,14 @@ export default function Login() {
             setPassword('');
 
             if (response.data && response.data.data === true) {
-                navigate('/home');
+                window.localStorage.setItem('username', response.data.username);
+                if(response.data.type==="user")
+                {
+                    navigate('/listproducts');
+                }else{
+                    navigate('/Dashboard');
+                }
+                
             }
         } catch (err) {
             if (!err.response) {

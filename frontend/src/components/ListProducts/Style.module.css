@@ -1,0 +1,33 @@
+.pagination {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+  }
+  .pagination_container {
+    display:block;
+    position: relative;
+    bottom: 20px; /* Adjust the distance from the bottom as needed */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 1000; /* Ensure it's above other content */
+    margin-top: 15px; 
+  }
+  
+  .page_item {
+    margin: 0 10px;
+    font-weight:bold;
+    font-size:24px;
+  }
+  
+  .page_link {
+    cursor: pointer;
+    color: #007bff;
+  }
+  
+  .page_link:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navbar from "./Navbar";
 import Dashboard from "./Dashboard";
-
+import Profile from "../Profile/Profile";
 
 
 function App() {
@@ -14,7 +14,8 @@ function App() {
         <Navbar />
         {/* Main component on basis of selected navigation from nav bar */}
         <main className="grow">
-          <Dashboard />
+          {/* <Dashboard /> */}
+          <Profile />
         </main>
       </div>
     </>

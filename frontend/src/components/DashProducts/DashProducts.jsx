@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import NavbarProducts from "./NavbarProducts";
 
 import Products from "./Products";
@@ -6,7 +6,7 @@ import Products from "./Products";
 
 
 function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
   return (
     <>
@@ -14,7 +14,7 @@ function App() {
         {/* Side Navigation Bar */}
         <NavbarProducts />
         {/* Main component on basis of selected navigation from nav bar */}
-        <main className="grow">
+        <main className="ml-3 mt-3 grow">
           <Products />
         </main>
       </div>

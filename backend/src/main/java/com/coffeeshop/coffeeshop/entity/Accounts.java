@@ -2,7 +2,9 @@ package com.coffeeshop.coffeeshop.entity;
 
 import jakarta.persistence.*;
 
-@Entity(name="accounts")
+import java.util.List;
+
+@Entity(name="Accounts")
 public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +19,36 @@ public class Accounts {
     private String type;
     @Column(name="point")
     private int point = 0;
+    @OneToMany(mappedBy = "account")
+    private List<Customers> customersList;
+    @OneToMany(mappedBy = "account")
+    private List<Online_orders>online_ordersList;
+    @OneToMany(mappedBy = "accounts")
+    private List<Exchange_gifts>exchange_giftsList;
+
+    public List<Exchange_gifts> getExchange_giftsList() {
+        return exchange_giftsList;
+    }
+
+    public void setExchange_giftsList(List<Exchange_gifts> exchange_giftsList) {
+        this.exchange_giftsList = exchange_giftsList;
+    }
+
+    public List<Online_orders> getOnline_ordersList() {
+        return online_ordersList;
+    }
+
+    public void setOnline_ordersList(List<Online_orders> online_ordersList) {
+        this.online_ordersList = online_ordersList;
+    }
+
+    public List<Customers> getCustomersList() {
+        return customersList;
+    }
+
+    public void setCustomersList(List<Customers> customersList) {
+        this.customersList = customersList;
+    }
 
     public int getId() {
         return id;

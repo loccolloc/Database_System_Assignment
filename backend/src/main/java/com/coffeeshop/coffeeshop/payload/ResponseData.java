@@ -4,6 +4,15 @@ public class ResponseData {
     private int status=200;
     private String desc;
     private Object data;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public int getStatus() {
         return status;
