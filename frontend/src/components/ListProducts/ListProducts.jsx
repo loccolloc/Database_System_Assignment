@@ -3,7 +3,6 @@ import "./styles.css"; // Ensure the path to the CSS file is correct
 import React, { useState, useEffect } from "react";
 import createApiClient from "../../api/axios";
 import Pagination from "./Pagination";
-import blobToImage from "../../api/blobToImage";
 
 export default function ListProducts() {
   const [currentPage, setCurrentPage] = useState(1);
