@@ -26,8 +26,6 @@ public class Vouchers {
     @ManyToOne
     @JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "customer_voucher_fk"))
     private Customers customers;
-    @OneToMany(mappedBy = "voucher")
-    private List<Products>productsList;
     @OneToMany(mappedBy = "vouchers")
     private List<Redeem_vouchers>redeem_vouchersList;
 
@@ -37,14 +35,6 @@ public class Vouchers {
 
     public void setRedeem_vouchersList(List<Redeem_vouchers> redeem_vouchersList) {
         this.redeem_vouchersList = redeem_vouchersList;
-    }
-
-    public List<Products> getProductsList() {
-        return productsList;
-    }
-
-    public void setProductsList(List<Products> productsList) {
-        this.productsList = productsList;
     }
 
     public int getId() {
