@@ -21,3 +21,38 @@
 html {
   scroll-behavior: smooth;
 }
+
+.productRating {
+  display: flex; /* Aligns children (stars) in a row */
+  align-items: center; /* Centers stars vertically within the container */
+  justify-content: flex-start; /* Aligns stars to the start of the container */
+}
+.productSales,
+.productTime {
+  font-size: 1.2rem; /* Keep smaller font size for secondary information */
+  color: var(--color-green-primary);
+}
+.displayStack__1,
+.displayStack__2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+.productPrice {
+  font-size: 1.8rem; /* Slightly larger for visibility */
+  color: var(--color-orange-primary);
+}
+.productCard__wishlist {
+  right: 4rem; /* Adjust spacing */
+  top: 1rem;
+}
+.productCard__fastSelling {
+  left: 1rem;
+  top: 1rem;
+  color: var(--color-orange-primary); /* Use color instead of fill for icons */
+}
+.productCard__cart {
+  right: 1rem;
+  top: 1rem;
+}

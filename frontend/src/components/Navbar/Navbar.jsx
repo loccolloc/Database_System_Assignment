@@ -17,6 +17,9 @@ const Navbar = () => {
   const handleOrderClick = () => {
     navigate('/login'); // Điều hướng sang trang Login
   };
+  const handleCartClick = () => {
+    navigate('/cart'); // Điều hướng sang trang Login
+  };
   return (
     <>
       <div className="bg-white from-secondary to-secondary/90 shadow-md bg-gray-900 text-white">
@@ -59,6 +62,14 @@ const Navbar = () => {
               >
                 Order
                 <FaCoffee className="text-xl text-white drop-shadow-sm cursor-pointer" />
+              </button>
+              <button
+                className=" hover:scale-105 duration-200 text-black px-4 py-2 flex items-center gap-3"
+                onClick={handleCartClick} // Gọi hàm handleOrderClick khi nút được nhấp
+              >
+                
+               
+                <i className="fa-solid fa-cart-shopping"></i>
               </button>
             </div>
           </div>

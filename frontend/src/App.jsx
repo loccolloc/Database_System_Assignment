@@ -10,11 +10,15 @@ import AOS from "aos";
 import Login from './components/Login/Login.jsx';
 import Signup from "./components/Signup/Signup.jsx"
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import DashProducts from "../src/components/DashProducts/DashProducts.jsx"
+import DashProducts from "../src/components/DashProducts/DashProducts.jsx";
+import ListProducts from "./components/ListProducts/ListProducts.jsx";
 import "aos/dist/aos.css";
-
-import MainDashboard from "../src/components/Dashboard/MainDashboard.jsx"
-
+import DashGift from "./components/DashGift/DashGift.jsx";
+import MainDashboard from "../src/components/Dashboard/MainDashboard.jsx";
+import Cart from '../src/components/Cart/Cart.jsx';
+import Invoice from "../src/components/Invoice/Invoice.jsx";
+import ProductDetail from "../src/components/ProductDetail/ProductDetail.jsx";
+import Profile from "../src/components/Profile/Profile.jsx"
 const App = () => {
   React.useEffect(() => {
     AOS.init({
@@ -37,6 +41,12 @@ const App = () => {
       <Route path="/products" element={<DashProducts />} />
       <Route path="/dashboard" element={<MainDashboard />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/listproducts" element={<ListProducts />} />
+      <Route path="/gift" element={<DashGift />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/invoice" element={<Invoice />} />
+      <Route path="/detail" element={<ProductDetail />} />
+      <Route path="/profile" element={<Profile />} />
       
           <Route path="/" element={
             <>
