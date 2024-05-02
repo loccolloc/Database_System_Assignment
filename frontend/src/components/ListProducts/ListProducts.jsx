@@ -1,5 +1,5 @@
-import Products from "./Products"; 
-import "./styles.css"; 
+import Products from "./Products"; // Import the Products component
+import "./styles.css"; // Ensure the path to the CSS file is correct
 import React, { useState, useEffect } from "react";
 import createApiClient from "../../api/axios";
 import Pagination from "./Pagination";
