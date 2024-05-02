@@ -28,7 +28,8 @@ public class LoginController {
             responseData.setData(true);
             List<Accounts> accountsList=accountsRepository.findByUsernameAndPassword(username,password);
             for(Accounts accounts:accountsList){
-                responseData.setType(accounts.getRole());
+                responseData.setRole(accounts.getRole());
+                responseData.setUsername(accounts.getUsername());
 
             }
 
@@ -47,4 +48,14 @@ public class LoginController {
 
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
+    @GetMapping("/getprofile")
+
+    public ResponseEntity<?> getProfile(@RequestParam String username){
+
+        ResponseData responseData=new ResponseData();
+        responseData.setData(loginServiceImp.getAccounts(username));
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+
 }

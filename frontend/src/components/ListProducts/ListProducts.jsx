@@ -1,12 +1,12 @@
-import Products from "./Products"; // Import the Products component
-import "./styles.css"; // Ensure the path to the CSS file is correct
+import Products from "./Products"; 
+import "./styles.css"; 
 import React, { useState, useEffect } from "react";
 import createApiClient from "../../api/axios";
 import Pagination from "./Pagination";
 
 export default function ListProducts() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6); // Đặt là 6 sản phẩm mỗi trang
+  const [itemsPerPage, setItemsPerPage] = useState(6); 
   const [productData, setProductData] = useState([]);
   useEffect(() => {
     const axios = createApiClient();

@@ -7,34 +7,28 @@ import { useEffect } from "react";
 import {  toast } from "react-toastify";
 const Profile = () => {
   
-  const [fullname, setFullname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
+  const [displayName, setdisplayName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [onEdit, setOnEdit] = useState(false);
   const [onDelete, setOnDelete] = useState(false);
   useEffect(() => {
-    axios.post("", {
-      id: 8,
-      action: "getUser",
-    }).then((res) => {
-      setFullname(res.data[0]["full_name"]);
-      setEmail(res.data[0]["email"]);
-      setPhoneNumber(res.data[0]["phone_number"]);
-      setAddress(res.data[0]["address"]);
+    const uname= window.localStorage.getItem('username');
+
+    axios.get(`http://localhost:8080/login/getprofile?username=${uname}`).then((res) => {
+    
+      setdisplayName(res.data.data[0].display_name);
+      setUsername(res.data.data[0].username);
+      setPassword(res.data.data[0].password);
+      setRole(res.data.data[0].role);
     });
   }, []);
 
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted");
-    // console.log("Username:", username);
-    // console.log("Password:", password);
-    console.log("Fullname:", fullname);
-    console.log("Email:", email);
-    console.log("Phone Number:", phoneNumber);
-    console.log("Address:", address);
+   
   };
   
   const handleEditInfo = async (e) => {
@@ -42,7 +36,7 @@ const Profile = () => {
     setOnEdit(!onEdit);
 
     await axios
-      .post("http://localhost/BE/index.php", {
+      .post("", {
         id: 8,
         full_name: fullname,
         email: email,
@@ -82,46 +76,46 @@ const Profile = () => {
         <div className="grid gap-y-4">
           <div className="grid grid-cols-1 gap-4">
             <div>
-                <label>Họ và tên</label>
+                <label>Display Name</label>
               <Input
                 size="lg"
                 
-                name="fullName"
-                value={fullname}
-                onChange={(e) => setFullname(e.target.value)}
+                name="displayName"
+                value={displayName}
+                onChange={(e) => setdisplayName(e.target.value)}
                 disabled={onEdit}
               />
             </div>
             <div>
-            <label>Email</label>
+            <label>Username</label>
               <Input
                 size="lg"
                
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 disabled={onEdit}
               />
             </div>
             <div>
-            <label>Số điện thoại</label>
+            <label>Password</label>
               <Input
                 size="lg"
                
-                name="phone_number"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 disabled={onEdit}
               />
             </div>
             <div>
-            <label>Địa chỉ</label>
+            <label>Role</label>
               <Input
                 size="lg"
               
-                name="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                name="role"
+                value={role}
+                // onChange={(e) => setAddress(e.target.value)}
                 disabled={onEdit}
               />
             </div>
