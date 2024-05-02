@@ -10,7 +10,11 @@ public class Gifts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "name")
+
     private String name;
+    @Lob
+    @Column(name="image")
+    private byte[] image;
     @Column(name="quantity")
     private int quantity ;
     @Column(name="point")
@@ -24,6 +28,14 @@ public class Gifts {
 
     public void setExchange_giftsList(List<Exchange_gifts> exchange_giftsList) {
         this.exchange_giftsList = exchange_giftsList;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public int getQuantity() {
