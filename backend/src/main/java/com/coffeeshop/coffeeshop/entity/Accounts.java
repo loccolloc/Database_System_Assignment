@@ -1,10 +1,44 @@
 package com.coffeeshop.coffeeshop.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
-@Entity(name="Accounts")
+@Entity(name = "Accounts")
+@NamedStoredProcedureQueries({
+        @NamedStoredProcedureQuery(
+                name = "addAccount",
+                procedureName = "Add_account",
+                parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "username", type = String.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "password", type = String.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "display_name", type = String.class),
+                        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "result", type = Integer.class)
+                }
+
+        ),
+        @NamedStoredProcedureQuery(
+                name = "deleteAccount",
+                procedureName = "Delete_account",
+                parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "username", type = String.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "password", type = String.class),
+                        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "result", type = Integer.class)
+                }
+        ),
+        @NamedStoredProcedureQuery(
+                name = "changePassword",
+                procedureName = "Change_password",
+                parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "username", type = String.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "password", type = String.class),
+                        @StoredProcedureParameter(mode = ParameterMode.IN, name = "new_password", type = String.class),
+                        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "result", type = Integer.class)
+                }
+        ),
+})
+@Data
 public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,88 +47,14 @@ public class Accounts {
     private String username;
     @Column(name = "password")
     private String password;
-    @Column(name ="display_name" )
+    @Column(name = "display_name")
     private String display_name;
-    @Column(name="type")
-    private String type;
-    @Column(name="point")
+    @Column(name = "point")
     private int point = 0;
     @OneToMany(mappedBy = "account")
     private List<Customers> customersList;
     @OneToMany(mappedBy = "account")
-    private List<Online_orders>online_ordersList;
+    private List<Online_orders> online_ordersList;
     @OneToMany(mappedBy = "accounts")
-    private List<Exchange_gifts>exchange_giftsList;
-
-    public List<Exchange_gifts> getExchange_giftsList() {
-        return exchange_giftsList;
-    }
-
-    public void setExchange_giftsList(List<Exchange_gifts> exchange_giftsList) {
-        this.exchange_giftsList = exchange_giftsList;
-    }
-
-    public List<Online_orders> getOnline_ordersList() {
-        return online_ordersList;
-    }
-
-    public void setOnline_ordersList(List<Online_orders> online_ordersList) {
-        this.online_ordersList = online_ordersList;
-    }
-
-    public List<Customers> getCustomersList() {
-        return customersList;
-    }
-
-    public void setCustomersList(List<Customers> customersList) {
-        this.customersList = customersList;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getDisplay_name() {
-        return display_name;
-    }
-
-    public void setDisplay_name(String display_name) {
-        this.display_name = display_name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getPoint() {
-        return point;
-    }
-
-    public void setPoint(int point) {
-        this.point = point;
-    }
+    private List<Exchange_gifts> exchange_giftsList;
 }
