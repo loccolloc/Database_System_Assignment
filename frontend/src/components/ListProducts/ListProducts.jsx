@@ -1,5 +1,5 @@
-import Products from "./Products"; // Import the Products component
-import "./styles.css"; // Ensure the path to the CSS file is correct
+import Products from "./Products"; 
+import "./styles.css"; 
 import React, { useState, useEffect } from "react";
 import createApiClient from "../../api/axios";
 import Pagination from "./Pagination";
@@ -50,6 +50,7 @@ export default function ListProducts() {
           itemsPerPage={itemsPerPage}
           totalItems={productData.length}
           paginate={paginate}
+          currentPage={currentPage}
         />
       </div>
     </div>

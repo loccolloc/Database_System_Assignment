@@ -11,7 +11,7 @@ function Products(props) {
   return (
     <div className='productList' onClick={handleClick}>
       <div className='productCard'>
-        <img src={`data:image/png;base64,${props.image}`} alt='product-img' className='productImage'></img>
+        <img src={props.image} alt='product-img' className='productImage'></img>
   
         <FaShoppingCart className={"productCard__cart"} />
         <FaRegBookmark className={"productCard__wishlist"} />
@@ -20,15 +20,16 @@ function Products(props) {
         <div className='productCard__content'>
           <h3 className='productName'>{props.name}</h3>
           <div className='displayStack__1'>
-            <div className='productPrice'>${props.list_price}</div>
-            <div className='productDiscount'>{props.discount}% off</div>
+            <div className='productPrice'>${props.price}</div>
+            <div className='productSales'>{props.totalSales} units sold</div>
           </div>
           <div className='displayStack__2'>
-            <div className='productState'>{props.state}</div>
             <div className='productRating'>
-              <FaStar className='starIcon' />
-              {props.rating}
+              {[...Array(props.rating)].map((_, index) => (
+                <FaStar key={index} />
+              ))}
             </div>
+            <div className='productTime'>{props.timeLeft} days left</div>
           </div>
         </div>
       </div>
@@ -36,14 +37,13 @@ function Products(props) {
   );
 }
 
-// Define prop types for the Products component
 Products.propTypes = {
   id: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  list_price: PropTypes.number.isRequired,
-  discount: PropTypes.number.isRequired,
-  state: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  totalSales: PropTypes.number.isRequired,
+  timeLeft: PropTypes.number.isRequired,
   rating: PropTypes.number.isRequired,
 };
 

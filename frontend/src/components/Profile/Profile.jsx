@@ -12,8 +12,9 @@ const Profile = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [onEdit, setOnEdit] = useState(false);
+  const [onDelete, setOnDelete] = useState(false);
   useEffect(() => {
-    axios.post("http://localhost/BE/index.php", {
+    axios.post("", {
       id: 8,
       action: "getUser",
     }).then((res) => {
@@ -125,14 +126,17 @@ const Profile = () => {
               />
             </div>
           </div>
-          
-          <div className="grid grid-cols-1 gap-4">
-            <div className="flex justify-end">
-              <Button type="submit">
-                {onEdit ? `Lưu thông tin` : `Chỉnh sửa thông tin`}
-              </Button>
-            </div>
-          </div>
+         
+          <div className="grid grid-cols-1 gap-4 mt-3">
+  <div className="flex justify-between">
+    <Button type="submit" >
+      Xóa tài khoản
+    </Button>
+    <Button type="submit">
+      {onEdit ? `Lưu thông tin` : `Chỉnh sửa thông tin`}
+    </Button>
+  </div>
+</div>
         </div>
       </form>
 
