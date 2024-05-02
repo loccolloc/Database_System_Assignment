@@ -11,7 +11,7 @@ public class AccountsDTO {
 
     private String display_name;
 
-    private String type;
+    private String role;
     private int point = 0;
 
     public int getId() {
@@ -46,12 +46,12 @@ public class AccountsDTO {
         this.display_name = display_name;
     }
 
-    public String getType() {
-        return type;
+    public String getRole() {
+        return role;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public int getPoint() {
