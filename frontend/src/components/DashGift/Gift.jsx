@@ -9,7 +9,7 @@ import {
 } from 'material-react-table';
 import {
   Box,
-  Button,
+  
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 
 
-import { fakeData, usStates } from './makeData';
+
 const ImageCell = ({ cell }) => {
   return <img src={`data:image/png;base64,${cell.getValue()}`}  style={{ width: '100px', height: 'auto' }} />
 };
@@ -32,9 +32,15 @@ ImageCell.propTypes = {
 const Gift = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [giftData, setGiftData] = useState([]);
-
+  const [point, setPoint] = useState("");
   useEffect(() => {
+    const uname= window.localStorage.getItem('username');
     const axios = createApiClient();
+    axios.get(`http://localhost:8080/login/getprofile?username=${uname}`).then((res) => {
+    
+    
+    setPoint(res.data.data[0].point);
+  });
     axios.get("/gifts/getAllGifts")
       .then(response => {
         setGiftData(response.data);
@@ -83,13 +89,15 @@ const Gift = () => {
     },
     {
       accessorKey: 'quantity',
-      header: 'quantity',
-      editVariant: 'select',
-      editSelectOptions: usStates,
+      header: 'Quantity',
       muiEditTextFieldProps: {
-        select: true,
-        error: !!validationErrors?.state,
-        helperText: validationErrors?.state,
+        required: true,
+        error: !!validationErrors?.point,
+        helperText: validationErrors?.point,
+        onFocus: () => setValidationErrors({
+          ...validationErrors,
+          point: undefined,
+        }),
       },
     },
   ], [validationErrors]);
@@ -154,7 +162,7 @@ const Gift = () => {
 
   return<div>
    <h1 className='font-bold' style={{ fontSize: '30px', textAlign:'center',marginTop:'8px' }}>Customer rewards</h1>
-    <div className='mb-10 ml-10 mt-10 font-bold' style={{ fontSize: '20px' }}> Your Point: 0 <i style={{ color: '#F28A00' }} className="fa-solid fa-coins fs-3  "></i></div>
+    <div className='mb-10 ml-10 mt-10 font-bold' style={{ fontSize: '20px' }}> Your Point: {point} <i style={{ color: '#F28A00' }} className="fa-solid fa-coins fs-3  "></i></div>
    <MaterialReactTable table={table} />;
   </div> 
 };

@@ -1,7 +1,9 @@
 
 import { FaCoffee } from "react-icons/fa";
 import Hcmut from "../../assets/website/hcmutlog.png";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
+import { FaPowerOff } from "react-icons/fa";
+import { FaUserAlt } from "react-icons/fa";
 
 const Menu = [
   {
@@ -13,12 +15,23 @@ const Menu = [
  
 ];
 const Navbar = () => {
-  const navigate = useNavigate(); // Sử dụng hook useNavigate
+  const role = window.localStorage.getItem('role');
+  const navigate = useNavigate(); 
   const handleOrderClick = () => {
-    navigate('/login'); // Điều hướng sang trang Login
+    navigate('/login'); 
   };
   const handleCartClick = () => {
-    navigate('/cart'); // Điều hướng sang trang Login
+    navigate('/cart'); 
+  };
+  const handleProductClick = () => {
+    navigate('/listproducts'); 
+  };
+  const handleLogoutClick = () => {
+    localStorage.clear();
+        window.location.reload();
+  };
+  const handleProfileClick = () => {
+    navigate('/Dashboard'); 
   };
   return (
     <>
@@ -56,21 +69,37 @@ const Navbar = () => {
                   </li>
                 ))}
               </ul>
+              {(role === "admin" || role === "user") && (
+                <button
+                  className="bg-blue-800 hover:scale-105 duration-200 text-white px-4 py-2 rounded-full flex items-center gap-3"
+                  onClick={handleProfileClick}
+                >
+                  <FaUserAlt  className="text-xl text-white drop-shadow-sm cursor-pointer" />
+                </button>
+              )}
               <button
                 className="bg-blue-800 hover:scale-105 duration-200 text-white px-4 py-2 rounded-full flex items-center gap-3"
-                onClick={handleOrderClick} // Gọi hàm handleOrderClick khi nút được nhấp
+                onClick={(role === 'admin' || role === 'user') ? handleProductClick : handleOrderClick}
               >
                 Order
                 <FaCoffee className="text-xl text-white drop-shadow-sm cursor-pointer" />
               </button>
-              <button
-                className=" hover:scale-105 duration-200 text-black px-4 py-2 flex items-center gap-3"
-                onClick={handleCartClick} // Gọi hàm handleOrderClick khi nút được nhấp
-              >
-                
-               
-                <i className="fa-solid fa-cart-shopping"></i>
-              </button>
+              {role === "user" && (
+                <button
+                  className="hover:scale-105 duration-200 text-black px-4 py-2 flex items-center gap-3"
+                  onClick={handleCartClick}
+                >
+                  <i className="fa-solid fa-cart-shopping"></i>
+                </button>
+              )}
+ {(role === "admin" || role === "user") && (
+                <button
+                  className="bg-blue-800 hover:scale-105 duration-200 text-white px-4 py-2 rounded-full flex items-center gap-3"
+                  onClick={handleLogoutClick}
+                >
+                  <FaPowerOff className="text-xl text-white drop-shadow-sm cursor-pointer" />
+                </button>
+              )}
             </div>
           </div>
         </div>
