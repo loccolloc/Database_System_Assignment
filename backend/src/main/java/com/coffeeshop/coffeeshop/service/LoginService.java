@@ -35,6 +35,25 @@ public class LoginService implements LoginServiceImp {
     }
 
     @Override
+    public List<AccountsDTO> getAccounts(String username) {
+        List<Accounts>listAccount=accountsRepository.findByUsername(username);
+        List<AccountsDTO>accountsDTOListt=new ArrayList<>();
+        for(Accounts accounts:listAccount){
+            AccountsDTO accountsDTO=new AccountsDTO();
+            accountsDTO.setId(accounts.getId());
+            accountsDTO.setUsername(accounts.getUsername());
+            accountsDTO.setPassword(accounts.getPassword());
+            accountsDTO.setDisplay_name(accounts.getDisplay_name());
+            accountsDTO.setPoint(accounts.getPoint());
+            accountsDTO.setRole(accounts.getRole());
+            accountsDTOListt.add(accountsDTO);
+
+
+        }
+        return accountsDTOListt;
+    }
+
+    @Override
     public boolean checkLogin(String username, String password) {
       List<Accounts> listAccounts= accountsRepository.findByUsernameAndPassword(username,password);
         return listAccounts.size() > 0 ;

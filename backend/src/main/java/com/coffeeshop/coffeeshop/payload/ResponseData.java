@@ -4,14 +4,23 @@ public class ResponseData {
     private int status=200;
     private String desc;
     private Object data;
-    private String type;
+    private String role;
+    private String username;
 
-    public String getType() {
-        return type;
+    public String getUsername() {
+        return username;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public int getStatus() {

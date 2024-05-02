@@ -9,4 +9,6 @@ public interface LoginServiceImp {
     List<AccountsDTO>getAllAccounts();
     boolean checkLogin(String username, String password);
     boolean addAccount(SignUpRequest signUpRequest);
+    List<AccountsDTO> getAccounts(String username);
+
 }

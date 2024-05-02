@@ -3,9 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useState,useEffect,useRef } from "react";
 import loginImg from '../../assets/trees.jpg'
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 const LOGIN_URL = 'http://localhost:8080/login/signin';
 
 export default function Login() {
+    const showToastMessage = () => {
+        toast.error("Tên đăng nhập hoặc mật khẩu sai!");
+      };
+    
     const userRef = useRef();
     const errRef = useRef();
     const navigate = useNavigate();
@@ -33,19 +40,25 @@ export default function Login() {
                 }
             });
             console.log(response.data);
-
-            setUsername('');
-            setPassword('');
+          
+            
 
             if (response.data && response.data.data === true) {
+               
                 window.localStorage.setItem('username', response.data.username);
-                if(response.data.type==="user")
+                window.localStorage.setItem('role', response.data.role);
+
+                if(response.data.role==="user")
                 {
                     navigate('/listproducts');
                 }else{
                     navigate('/Dashboard');
                 }
+               
                 
+            }else{
+
+                showToastMessage();
             }
         } catch (err) {
             if (!err.response) {
@@ -53,10 +66,14 @@ export default function Login() {
                 setErrMsg('No Server Response');
             } else if (err.response.status === 400) {
                 setErrMsg('Missing Username or Password');
+                showToastMessage();
             } else if (err.response.status === 401) {
                 setErrMsg('Unauthorized');
             } else {
                 setErrMsg('Login Failed');
+                showToastMessage();
+
+
             }
             errRef.current.focus();
         }
@@ -73,6 +90,7 @@ export default function Login() {
             <form onSubmit={handleSubmit} className='max-w-[400px] w-full mx-auto bg-white p-4'>
                 <h2 className='text-4xl font-bold text-center py-6'>Tây Nguyên Legend</h2>
                 <div className='flex flex-col py-2'>
+                <ToastContainer />
                     <label className='font-bold'>Username</label>
                     <input  className='border p-2' type="text" id="username" ref={userRef} required value={username} onChange={(e)=>setUsername(e.target.value)} autoComplete='off' />
                 </div>
