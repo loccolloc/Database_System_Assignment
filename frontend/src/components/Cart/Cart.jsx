@@ -59,15 +59,15 @@ export default function QuantityEdit() {
                                                     </MDBTypography>
                                                 </MDBCol>
                                                 <MDBCol md="3" lg="3" xl="3" className="d-flex align-items-center">
-                                                    <MDBBtn color="link" className="px-2">
+                                                    {/* <MDBBtn color="link" className="px-2">
                                                         <MDBIcon fas icon="minus" />
-                                                    </MDBBtn>
+                                                    </MDBBtn> */}
     
                                                     <MDBInput type="number" min="0" defaultValue={1} size="sm" />
     
-                                                    <MDBBtn color="link" className="px-2">
+                                                    {/* <MDBBtn color="link" className="px-2">
                                                         <MDBIcon fas icon="plus" />
-                                                    </MDBBtn>
+                                                    </MDBBtn> */}
                                                 </MDBCol>
                                                 <MDBCol md="3" lg="2" xl="2" className="text-end">
                                                     <MDBTypography tag="h6" className="font-bold mb-0">

@@ -50,6 +50,7 @@ export default function ListProducts() {
           itemsPerPage={itemsPerPage}
           totalItems={productData.length}
           paginate={paginate}
+          currentPage={currentPage}
         />
       </div>
     </div>
