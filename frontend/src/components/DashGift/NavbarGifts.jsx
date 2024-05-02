@@ -20,6 +20,8 @@ const variants = {
 };
 
 function NavbarGifts() {
+  const role = window.localStorage.getItem('role');
+
   const [isExpanded, setIsExpanded] = useState(true);
   const navigate = useNavigate();
   return (
@@ -56,13 +58,14 @@ function NavbarGifts() {
           </div>
         </div>
 
-        <div className="nav-links w-full hover-effect "  onClick={() => navigate('/products')}> 
-        <div className="flex space-x-3 w-full p-2 rounded  hover-effect ">
-            <Clock4Icon />
-            <span className={!isExpanded ? "hidden" : "block"}>Products</span>
+        {role !== "user" && (
+          <div className="nav-links w-full hover-effect "  onClick={() => navigate('/products')}>
+            <div className="flex space-x-3 w-full p-2 rounded">
+              <Clock4Icon />
+              <span className={!isExpanded ? "hidden" : "block"}>Products</span>
+            </div>
           </div>
-        </div>
-
+        )}
         <div className="nav-links w-full">
         <div className="flex space-x-3 w-full p-2 rounded bg-blue-800 text-white ">
             <BarChart3Icon />

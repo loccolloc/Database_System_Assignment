@@ -19,7 +19,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { usStates } from './makeData';
+
 
 const ImageCell = ({ cell }) => (
   <img src={`data:image/png;base64,${cell.getValue()}`}  style={{ width: '100px', height: 'auto' }} />
@@ -43,7 +43,7 @@ const Products = () => {
         console.log(response.data);
       })
       .catch(error => console.error('Failed to fetch products:', error));
-  }, []); // Dependency array is empty to ensure this runs only once
+  }, []); 
 
   const columns = useMemo(() => [
     {
@@ -53,7 +53,7 @@ const Products = () => {
       size: 80,
     },
     {
-      accessorKey: 'name', // Ensure these keys match your actual data keys
+      accessorKey: 'name', 
       header: 'name',
       muiEditTextFieldProps: {
         required: true,
@@ -66,7 +66,7 @@ const Products = () => {
       },
     },
     {
-      accessorKey: 'type', // Ensure these keys match your actual data keys
+      accessorKey: 'type', 
       header: 'type',
       muiEditTextFieldProps: {
         required: true,
@@ -84,14 +84,16 @@ const Products = () => {
       Cell: ImageCell,
     },
     {
-      accessorKey: 'list_price',
+      accessorKey: 'list_price', 
       header: 'list_price',
-      editVariant: 'select',
-      editSelectOptions: usStates,
       muiEditTextFieldProps: {
-        select: true,
-        error: !!validationErrors.state,
-        helperText: validationErrors.state,
+        required: true,
+        error: !!validationErrors.type,
+        helperText: validationErrors.type,
+        onFocus: () => setValidationErrors({
+          ...validationErrors,
+          type: undefined,
+        }),
       },
     },
   ], [validationErrors]);
