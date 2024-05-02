@@ -28,7 +28,7 @@ public class LoginController {
             responseData.setData(true);
             List<Accounts> accountsList=accountsRepository.findByUsernameAndPassword(username,password);
             for(Accounts accounts:accountsList){
-                responseData.setType(accounts.getType());
+                responseData.setType(accounts.getRole());
 
             }
 

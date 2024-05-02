@@ -15,8 +15,8 @@ public class Accounts {
     private String password;
     @Column(name ="display_name" )
     private String display_name;
-    @Column(name="type")
-    private String type;
+    @Column(name="role")
+    private String role;
     @Column(name="point")
     private int point = 0;
     @OneToMany(mappedBy = "account")
@@ -82,12 +82,12 @@ public class Accounts {
         this.display_name = display_name;
     }
 
-    public String getType() {
-        return type;
+    public String getRole() {
+        return role;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public int getPoint() {

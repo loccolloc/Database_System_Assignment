@@ -4,13 +4,13 @@ public class SignUpRequest {
     private String username;
     private String password;
     private String display_name;
-    private String type;
-    public String getType() {
-        return type;
+    private String role;
+    public String getRole() {
+        return role;
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.role = role;
     }
 
 

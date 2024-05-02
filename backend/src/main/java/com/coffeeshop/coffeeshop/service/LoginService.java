@@ -24,8 +24,8 @@ public class LoginService implements LoginServiceImp {
             accountsDTO.setUsername(accounts.getUsername());
             accountsDTO.setPassword(accounts.getPassword());
             accountsDTO.setDisplay_name(accounts.getDisplay_name());
-            accountsDTO.setType(accounts.getType());;
             accountsDTO.setPoint(accountsDTO.getPoint());
+            accountsDTO.setRole(accountsDTO.getRole());
             accountsDTOList.add(accountsDTO);
 
 
@@ -46,7 +46,7 @@ public class LoginService implements LoginServiceImp {
         accounts.setUsername(signUpRequest.getUsername());
         accounts.setPassword(signUpRequest.getPassword());
         accounts.setDisplay_name(signUpRequest.getDisplay_name());
-        accounts.setType(signUpRequest.getType());
+        accounts.setRole(signUpRequest.getRole());
 
         try{
             accountsRepository.save(accounts);
