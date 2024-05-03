@@ -1,0 +1,28 @@
+###
+GET http://localhost:8080/products/all
+
+###
+POST http://localhost:8080/login/login?
+    username=Nguyen&
+    password=123456
+
+###
+POST http://localhost:8080/login/signup
+Content-Type: application/json
+
+{
+  "username": "Chi",
+  "password": "123456",
+  "display_name": "GVBM"
+}
+
+###
+POST http://localhost:8080/login/changePassword?
+    username=Nguyen&
+    password=123456&
+    newPassword=654321
+
+###
+POST http://localhost:8080/login/delete?
+    username=Chi&
+    password=123456
