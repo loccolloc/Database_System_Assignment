@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import createApiClient from "../../api/axios";
+
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -7,7 +9,7 @@ import {
 } from 'material-react-table';
 import {
   Box,
-  Button,
+  
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -16,11 +18,9 @@ import {
 } from '@mui/material';
 
 
-// Assume fakeData and usStates are already defined in './makeData';
-import { fakeData, usStates } from './makeData';
+
 const ImageCell = ({ cell }) => {
-  console.log(cell.getValue()); // Kiểm tra xem giá trị là gì
-  return <img src={cell.getValue()} alt="Product" style={{ width: '100px', height: 'auto' }} />;
+  return <img src={`data:image/png;base64,${cell.getValue()}`}  style={{ width: '100px', height: 'auto' }} />
 };
 
 
@@ -31,6 +31,23 @@ ImageCell.propTypes = {
 };
 const Gift = () => {
   const [validationErrors, setValidationErrors] = useState({});
+  const [giftData, setGiftData] = useState([]);
+  const [point, setPoint] = useState("");
+  useEffect(() => {
+    const uname= window.localStorage.getItem('username');
+    const axios = createApiClient();
+    axios.get(`http://localhost:8080/login/getprofile?username=${uname}`).then((res) => {
+    
+    
+    setPoint(res.data.data[0].point);
+  });
+    axios.get("/gifts/getAllGifts")
+      .then(response => {
+        setGiftData(response.data);
+        console.log(response.data);
+      })
+      .catch(error => console.error('Failed to fetch products:', error));
+  }, []); 
 
   const columns = useMemo(() => [
     {
@@ -40,15 +57,15 @@ const Gift = () => {
       size: 80,
     },
     {
-      accessorKey: 'Name',
-      header: 'Name',
+      accessorKey: 'name',
+      header: 'name',
       muiEditTextFieldProps: {
         required: true,
-        error: !!validationErrors?.firstName,
-        helperText: validationErrors?.firstName,
+        error: !!validationErrors?.name,
+        helperText: validationErrors?.name,
         onFocus: () => setValidationErrors({
           ...validationErrors,
-          firstName: undefined,
+          name: undefined,
         }),
       },
     },
@@ -57,11 +74,11 @@ const Gift = () => {
       header: 'Point',
       muiEditTextFieldProps: {
         required: true,
-        error: !!validationErrors?.lastName,
-        helperText: validationErrors?.lastName,
+        error: !!validationErrors?.point,
+        helperText: validationErrors?.point,
         onFocus: () => setValidationErrors({
           ...validationErrors,
-          lastName: undefined,
+          point: undefined,
         }),
       },
     },
@@ -71,21 +88,23 @@ const Gift = () => {
       Cell: ImageCell,
     },
     {
-      accessorKey: 'state',
-      header: 'State',
-      editVariant: 'select',
-      editSelectOptions: usStates,
+      accessorKey: 'quantity',
+      header: 'Quantity',
       muiEditTextFieldProps: {
-        select: true,
-        error: !!validationErrors?.state,
-        helperText: validationErrors?.state,
+        required: true,
+        error: !!validationErrors?.point,
+        helperText: validationErrors?.point,
+        onFocus: () => setValidationErrors({
+          ...validationErrors,
+          point: undefined,
+        }),
       },
     },
   ], [validationErrors]);
 
   const table = useMaterialReactTable({
     columns,
-    data: fakeData, // Đảm bảo rằng fakeData bây giờ bao gồm URL hình ảnh thay vì email
+    data: giftData, 
     createDisplayMode: 'modal',
     editDisplayMode: 'modal',
     enableEditing: true,
@@ -98,9 +117,9 @@ const Gift = () => {
       sx: { minHeight: '500px' },
     },
     onCreatingRowCancel: () => setValidationErrors({}),
-    onCreatingRowSave: ({ values }) => console.log('Create action', values), // Simulate save action
+    onCreatingRowSave: ({ values }) => console.log('Create action', values), 
     onEditingRowCancel: () => setValidationErrors({}),
-    onEditingRowSave: ({ values }) => console.log('Edit action', values), // Simulate save action
+    onEditingRowSave: ({ values }) => console.log('Edit action', values), 
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
          
@@ -143,7 +162,7 @@ const Gift = () => {
 
   return<div>
    <h1 className='font-bold' style={{ fontSize: '30px', textAlign:'center',marginTop:'8px' }}>Customer rewards</h1>
-    <div className='mb-10 ml-10 mt-10 font-bold' style={{ fontSize: '20px' }}> Your Point: 0 <i style={{ color: '#F28A00' }} className="fa-solid fa-coins fs-3  "></i></div>
+    <div className='mb-10 ml-10 mt-10 font-bold' style={{ fontSize: '20px' }}> Your Point: {point} <i style={{ color: '#F28A00' }} className="fa-solid fa-coins fs-3  "></i></div>
    <MaterialReactTable table={table} />;
   </div> 
 };
@@ -151,13 +170,3 @@ const Gift = () => {
 export default Gift;
 
 
-// Validation function
-function validateUser(user) {
-  return {
-    firstName: user.firstName ? '' : 'First Name is Required',
-    lastName: user.lastName ? '' : 'Last Name is Required',
-    email: user.email.match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    ) ? '' : 'Incorrect Email Format',
-  };
-}

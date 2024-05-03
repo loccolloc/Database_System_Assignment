@@ -30,7 +30,7 @@ public class LoginController {
             Accounts account = accountsRepository.findByUsernameAndPassword(username, password);
             responseData.setType(account.getRole());
 
-        } else {
+       }else{
 
             responseData.setData(false);
         }
@@ -58,4 +58,14 @@ public class LoginController {
         responseData.setData(loginService.deleteAccount(username, password));
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
+    @GetMapping("/getprofile")
+
+    public ResponseEntity<?> getProfile(@RequestParam String username){
+
+        ResponseData responseData=new ResponseData();
+        responseData.setData(loginService.getAccounts(username));
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+
 }

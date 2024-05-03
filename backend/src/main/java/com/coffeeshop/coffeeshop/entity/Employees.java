@@ -14,11 +14,12 @@ public class Employees {
     @Column(name = "first_name")
     private String first_name;
     @Column(name = "gender")
+    private String email;
+    @Column(name = "email")
     private String gender;
     @Column(name = "location")
     private String location;
-    @Column(name = "phone_number")
-    private String phone_number;
+
     @Column(name = "position")
     private String position;
     @Column(name = "start_date")
@@ -52,6 +53,14 @@ public class Employees {
     private List<Register_shifts> register_shifts;
     @OneToMany(mappedBy = "employee")
     private List<Orders>ordersList;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public com.coffeeshop.coffeeshop.entity.Drivers getDrivers() {
         return Drivers;
@@ -139,13 +148,6 @@ public class Employees {
         this.position = position;
     }
 
-    public String getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
-    }
 
     public String getLocation() {
         return location;

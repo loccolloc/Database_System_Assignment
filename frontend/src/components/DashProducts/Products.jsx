@@ -1,5 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import createApiClient from "../../api/axios";
+
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -17,21 +19,31 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-// Assume fakeData and usStates are already defined in './makeData';
-import { fakeData, usStates } from './makeData';
-const ImageCell = ({ cell }) => {
-  console.log(cell.getValue()); // Kiểm tra xem giá trị là gì
-  return <img src={cell.getValue()} alt="Product" style={{ width: '100px', height: 'auto' }} />;
-};
 
+
+const ImageCell = ({ cell }) => (
+  <img src={`data:image/png;base64,${cell.getValue()}`}  style={{ width: '100px', height: 'auto' }} />
+);
 
 ImageCell.propTypes = {
   cell: PropTypes.shape({
     getValue: PropTypes.func.isRequired
   }).isRequired
 };
+
 const Products = () => {
+  const [productData, setProductData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
+
+  useEffect(() => {
+    const axios = createApiClient();
+    axios.get("/products/all")
+      .then(response => {
+        setProductData(response.data);
+        console.log(response.data);
+      })
+      .catch(error => console.error('Failed to fetch products:', error));
+  }, []); 
 
   const columns = useMemo(() => [
     {
@@ -41,28 +53,28 @@ const Products = () => {
       size: 80,
     },
     {
-      accessorKey: 'firstName',
-      header: 'First Name',
+      accessorKey: 'name', 
+      header: 'name',
       muiEditTextFieldProps: {
         required: true,
-        error: !!validationErrors?.firstName,
-        helperText: validationErrors?.firstName,
+        error: !!validationErrors.name,
+        helperText: validationErrors.name,
         onFocus: () => setValidationErrors({
           ...validationErrors,
-          firstName: undefined,
+          name: undefined,
         }),
       },
     },
     {
-      accessorKey: 'lastName',
-      header: 'Last Name',
+      accessorKey: 'type', 
+      header: 'type',
       muiEditTextFieldProps: {
         required: true,
-        error: !!validationErrors?.lastName,
-        helperText: validationErrors?.lastName,
+        error: !!validationErrors.type,
+        helperText: validationErrors.type,
         onFocus: () => setValidationErrors({
           ...validationErrors,
-          lastName: undefined,
+          type: undefined,
         }),
       },
     },
@@ -72,42 +84,35 @@ const Products = () => {
       Cell: ImageCell,
     },
     {
-      accessorKey: 'state',
-      header: 'State',
-      editVariant: 'select',
-      editSelectOptions: usStates,
+      accessorKey: 'list_price', 
+      header: 'list_price',
       muiEditTextFieldProps: {
-        select: true,
-        error: !!validationErrors?.state,
-        helperText: validationErrors?.state,
+        required: true,
+        error: !!validationErrors.type,
+        helperText: validationErrors.type,
+        onFocus: () => setValidationErrors({
+          ...validationErrors,
+          type: undefined,
+        }),
       },
     },
   ], [validationErrors]);
 
   const table = useMaterialReactTable({
     columns,
-    data: fakeData, // Đảm bảo rằng fakeData bây giờ bao gồm URL hình ảnh thay vì email
+    data: productData,
+    getRowId: (row) => row.id,
+    enableEditing: true,
     createDisplayMode: 'modal',
     editDisplayMode: 'modal',
-    enableEditing: true,
-    getRowId: (row) => row.id,
-    muiToolbarAlertBannerProps: {
-      color: 'error',
-      children: 'Sample error message (simulated)',
-    },
-    muiTableContainerProps: {
-      sx: { minHeight: '500px' },
-    },
     onCreatingRowCancel: () => setValidationErrors({}),
-    onCreatingRowSave: ({ values }) => console.log('Create action', values), // Simulate save action
+    onCreatingRowSave: ({ values }) => console.log('Create action', values),
     onEditingRowCancel: () => setValidationErrors({}),
-    onEditingRowSave: ({ values }) => console.log('Edit action', values), // Simulate save action
+    onEditingRowSave: ({ values }) => console.log('Edit action', values),
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Create New User</DialogTitle>
-        <DialogContent
-          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-        >
+        <DialogTitle variant="h3">Create New Product</DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {internalEditComponents}
         </DialogContent>
         <DialogActions>
@@ -117,10 +122,8 @@ const Products = () => {
     ),
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Edit User</DialogTitle>
-        <DialogContent
-          sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
-        >
+        <DialogTitle variant="h3">Edit Product</DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {internalEditComponents}
         </DialogContent>
         <DialogActions>
@@ -143,35 +146,18 @@ const Products = () => {
       </Box>
     ),
     renderTopToolbarCustomActions: ({ table }) => (
-      <Button
-        variant="contained"
-        onClick={() => table.setCreatingRow(true)}
-      >
+      <Button variant="contained" onClick={() => table.setCreatingRow(true)}>
         Create New Product
       </Button>
     ),
   });
 
-  return( <div>
-       <h1 className='font-bold' style={{ fontSize: '30px', textAlign:'center',marginTop:'8px' }}>Products</h1>
-
-    <MaterialReactTable table={table} />
-    </div>)
- 
-  
-  
+  return (
+    <div>
+      <h1 className='font-bold' style={{ fontSize: '30px', textAlign: 'center', marginTop: '8px' }}>Products</h1>
+      <MaterialReactTable table={table} />
+    </div>
+  );
 };
 
 export default Products;
-
-
-// Validation function
-function validateUser(user) {
-  return {
-    firstName: user.firstName ? '' : 'First Name is Required',
-    lastName: user.lastName ? '' : 'Last Name is Required',
-    email: user.email.match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    ) ? '' : 'Incorrect Email Format',
-  };
-}

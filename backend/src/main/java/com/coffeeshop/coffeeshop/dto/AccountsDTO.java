@@ -12,6 +12,7 @@ public class AccountsDTO {
     private String display_name;
 
     private String role;
+
     private int point = 0;
 
     public int getId() {
