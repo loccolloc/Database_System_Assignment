@@ -61,7 +61,6 @@ public class LoginController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
     @GetMapping("/getprofile")
-
     public ResponseEntity<?> getProfile(@RequestParam String username){
 
         ResponseData responseData=new ResponseData();
