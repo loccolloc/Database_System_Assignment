@@ -1,5 +1,6 @@
 package com.coffeeshop.coffeeshop.controller;
 
+import com.coffeeshop.coffeeshop.dto.AccountsDTO;
 import com.coffeeshop.coffeeshop.entity.Accounts;
 import com.coffeeshop.coffeeshop.payload.ResponseData;
 import com.coffeeshop.coffeeshop.payload.request.SignUpRequest;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -62,7 +65,10 @@ public class LoginController {
     public ResponseEntity<?> getProfile(@RequestParam String username){
 
         ResponseData responseData=new ResponseData();
-        responseData.setData(loginService.getAccounts(username));
+        AccountsDTO accountsDTO=loginService.getAccounts(username);
+        List<AccountsDTO> li = new ArrayList<>();
+        li.add(accountsDTO);
+        responseData.setData(li);
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
