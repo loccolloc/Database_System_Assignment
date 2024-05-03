@@ -4,6 +4,7 @@ import com.coffeeshop.coffeeshop.dto.AccountsDTO;
 import com.coffeeshop.coffeeshop.entity.Accounts;
 import com.coffeeshop.coffeeshop.payload.request.SignUpRequest;
 import com.coffeeshop.coffeeshop.repository.AccountsRepository;
+import com.coffeeshop.coffeeshop.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class LoginServiceImp implements com.coffeeshop.coffeeshop.service.LoginService {
+public class LoginServiceImp implements LoginService {
     @Autowired
     AccountsRepository accountsRepository;
 
@@ -26,6 +27,7 @@ public class LoginServiceImp implements com.coffeeshop.coffeeshop.service.LoginS
             accountsDTO.setPassword(accounts.getPassword());
             accountsDTO.setDisplay_name(accounts.getDisplay_name());
             accountsDTO.setPoint(accountsDTO.getPoint());
+            accountsDTO.setRole(accounts.getRole());
             accountsDTOList.add(accountsDTO);
 
 

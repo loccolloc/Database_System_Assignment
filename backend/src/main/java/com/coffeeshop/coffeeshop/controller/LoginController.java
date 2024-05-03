@@ -1,5 +1,6 @@
 package com.coffeeshop.coffeeshop.controller;
 
+import com.coffeeshop.coffeeshop.entity.Accounts;
 import com.coffeeshop.coffeeshop.payload.ResponseData;
 import com.coffeeshop.coffeeshop.payload.request.SignUpRequest;
 import com.coffeeshop.coffeeshop.repository.AccountsRepository;
@@ -20,18 +21,16 @@ public class LoginController {
     LoginService loginService;
     @Autowired
     AccountsRepository accountsRepository;
+
     @PostMapping("/signin")
-    public ResponseEntity<?> signin(@RequestParam String username, @RequestParam String password){
-        ResponseData responseData=new ResponseData();
-        if(loginService.checkLogin(username, password)){
+    public ResponseEntity<?> signin(@RequestParam String username, @RequestParam String password) {
+        ResponseData responseData = new ResponseData();
+        if (loginService.checkLogin(username, password) != -1) {
             responseData.setData(true);
-            List<Accounts> accountsList=accountsRepository.findByUsernameAndPassword(username,password);
-            for(Accounts accounts:accountsList){
-                responseData.setType(accounts.getRole());
+            Accounts account = accountsRepository.findByUsernameAndPassword(username, password);
+            responseData.setType(account.getRole());
 
-            }
-
-       }else{
+        } else {
 
             responseData.setData(false);
         }
@@ -50,7 +49,7 @@ public class LoginController {
     public ResponseEntity<?> changePassword(@RequestParam String username, @RequestParam String password, @RequestParam String newPassword) {
         ResponseData responseData = new ResponseData();
         responseData.setData(loginService.changePassword(username, password, newPassword));
-        return new ResponseEntity<>(responseData, HttpStatus.OK );
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
     @PostMapping("/delete")
