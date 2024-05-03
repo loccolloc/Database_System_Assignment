@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -28,8 +27,8 @@ public class LoginController {
         if (loginService.checkLogin(username, password) != -1) {
             responseData.setData(true);
             Accounts account = accountsRepository.findByUsernameAndPassword(username, password);
-            responseData.setType(account.getRole());
-
+            responseData.setRole(account.getRole());
+            responseData.setUsername(account.getUsername());
        }else{
 
             responseData.setData(false);

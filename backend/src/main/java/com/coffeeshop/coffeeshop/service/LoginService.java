@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface LoginService {
     List<AccountsDTO>getAllAccounts();
+    AccountsDTO getAccounts(String username);
     int checkLogin(String username, String password);
     int addAccount(SignUpRequest signUpRequest);
     int changePassword(String username, String password, String newPassword);

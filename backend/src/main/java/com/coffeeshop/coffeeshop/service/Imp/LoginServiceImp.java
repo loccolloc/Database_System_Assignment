@@ -33,7 +33,19 @@ public class LoginServiceImp implements LoginService {
 
         }
         return accountsDTOList;
+    }
 
+    @Override
+    public AccountsDTO getAccounts(String username) {
+        Accounts accounts = accountsRepository.findByUsername(username);
+        AccountsDTO accountsDTO = new AccountsDTO();
+        accountsDTO.setId(accounts.getId());
+        accountsDTO.setUsername(accounts.getUsername());
+        accountsDTO.setPassword(accounts.getPassword());
+        accountsDTO.setDisplay_name(accounts.getDisplay_name());
+        accountsDTO.setPoint(accountsDTO.getPoint());
+        accountsDTO.setRole(accounts.getRole());
+        return accountsDTO;
     }
 
     @Override
