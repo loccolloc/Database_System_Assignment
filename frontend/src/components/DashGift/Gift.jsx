@@ -41,7 +41,7 @@ const Gift = () => {
     
     setPoint(res.data.data[0].point);
   });
-    axios.get("/gifts/getAllGifts")
+    axios.get("/gifts/all")
       .then(response => {
         setGiftData(response.data);
         console.log(response.data);
