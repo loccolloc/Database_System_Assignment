@@ -18,10 +18,10 @@ const Profile = () => {
 
     axios.get(`http://localhost:8080/login/getprofile?username=${uname}`).then((res) => {
     
-      setdisplayName(res.data.data[0].display_name);
-      setUsername(res.data.data[0].username);
-      setPassword(res.data.data[0].password);
-      setRole(res.data.data[0].role);
+      setdisplayName(res.data.data.display_name);
+      setUsername(res.data.data.username);
+      setPassword(res.data.data.password);
+      setRole(res.data.data.role);
     });
   }, []);
 
