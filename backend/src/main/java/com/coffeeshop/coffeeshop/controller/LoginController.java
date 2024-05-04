@@ -47,14 +47,14 @@ public class LoginController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
-    @PostMapping("/changePassword")
+    @PutMapping("/changePassword")
     public ResponseEntity<?> changePassword(@RequestParam String username, @RequestParam String password, @RequestParam String newPassword) {
         ResponseData responseData = new ResponseData();
         responseData.setData(loginService.changePassword(username, password, newPassword));
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<?> deleteAccount(@RequestParam String username, @RequestParam String password) {
         ResponseData responseData = new ResponseData();
         responseData.setData(loginService.deleteAccount(username, password));

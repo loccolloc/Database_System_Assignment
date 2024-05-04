@@ -1,9 +1,15 @@
 package com.coffeeshop.coffeeshop.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name="Gifts")
 public class Gifts {
     @Id
@@ -22,55 +28,10 @@ public class Gifts {
     @OneToMany(mappedBy = "gifts")
     private List<Exchange_gifts>exchange_giftsList;
 
-    public List<Exchange_gifts> getExchange_giftsList() {
-        return exchange_giftsList;
-    }
-
-    public void setExchange_giftsList(List<Exchange_gifts> exchange_giftsList) {
-        this.exchange_giftsList = exchange_giftsList;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Gifts(String name, int quantity, int point, byte[] image) {
         this.name = name;
-    }
-
-    public int getPoint() {
-        return point;
-    }
-
-    public void setPoint(int point) {
+        this.image = image;
+        this.quantity = quantity;
         this.point = point;
     }
-
-
-
-
 }

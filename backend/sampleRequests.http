@@ -2,7 +2,7 @@
 GET http://localhost:8080/products/all
 
 ###
-POST http://localhost:8080/login/login?
+POST http://localhost:8080/login/signin?
     username=Nguyen&
     password=123456
 
@@ -17,12 +17,54 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/login/changePassword?
+PUT http://localhost:8080/login/changePassword?
     username=Nguyen&
     password=123456&
     newPassword=654321
 
 ###
-POST http://localhost:8080/login/delete?
+DELETE http://localhost:8080/login/delete?
     username=Chi&
     password=123456
+
+###
+GET http://localhost:8080/products/get/1
+
+###
+POST http://localhost:8080/products/post
+Content-Type: application/json
+
+{
+  "name": "cefa",
+  "type": "d",
+  "list_price": 1,
+  "discount": 0.1,
+  "state": "available",
+  "image": []
+}
+
+###
+DELETE http://localhost:8080/products/delete/12
+
+###
+GET http://localhost:8080/gifts/get/1
+
+###
+POST http://localhost:8080/gifts/post
+Content-Type: application/json
+
+{
+  "name": "gau bong",
+  "image": [],
+  "quantity": 1,
+  "point": -100000
+}
+
+###
+DELETE http://localhost:8080/gifts/delete/8
+
+###
+GET http://localhost:8080/products/all
+
+###
+GET http://localhost:8080/gifts/all
