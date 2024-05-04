@@ -1,7 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
-import {  toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import PropTypes from 'prop-types';
+
 import {
   Button,
   Dialog,
@@ -11,33 +13,32 @@ import {
   Input,
 } from "@material-tailwind/react";
 
-export default function EditPassword() {
+export default function EditPassword({ username }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen((cur) => !cur);
-  const [oldPass, setOldPass] = useState();
-  const [newPass, setNewPass] = useState();
-  const [confirmPass, setConfirmPass] = useState();
+  const [oldPass, setOldPass] = useState('');
+  const [newPass, setNewPass] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
   function handleSubmit(e) {
     e.preventDefault();
+    if (newPass !== confirmPass) {
+      toast.error("The new passwords do not match.");
+      return;
+    }
+    const url = `http://localhost:8080/login/changePassword?username=${encodeURIComponent(username)}&password=${encodeURIComponent(oldPass)}&newPassword=${encodeURIComponent(newPass)}`;
+
     axios
-      .post("http://localhost/BE/index.php", {
-        id: 6,
-        oldPass: oldPass,
-        newPass: newPass,
-        action: "updatePass",
-      })
+      .put(url)
       .then((res) => {
-        if(res.data)
+        console.log("thay doi mat khau: ", res);
+        if(res.data.data===0)
         {
-          toast.success("Update Password successfully!!!", {
-            position: toast.POSITION.TOP_CENTER,
-          });
+
+          toast.success("Update Password successfully!!!");
         }
         else
         {
-          toast.warning("Update failed, Your password is incorrect!!!", {
-            position: toast.POSITION.TOP_CENTER,
-          });
+          toast.error("Update failed, Your password is incorrect!!!");
         }
 
       });
@@ -45,6 +46,7 @@ export default function EditPassword() {
 
   return (
     <>
+      <ToastContainer />
       <Button className="text-white bg-dark rounded py-2" onClick={handleOpen}>Thay đổi mật khẩu</Button>
       <Dialog
         size="xs"
@@ -102,3 +104,6 @@ export default function EditPassword() {
     </>
   );
 }
+EditPassword.propTypes = {
+  username: PropTypes.string.isRequired
+};
