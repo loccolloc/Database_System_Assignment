@@ -1,15 +1,14 @@
 package com.coffeeshop.coffeeshop.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Base64;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity(name="Gifts")
 public class Gifts {
     @Id
@@ -28,9 +27,9 @@ public class Gifts {
     @OneToMany(mappedBy = "gifts")
     private List<Exchange_gifts>exchange_giftsList;
 
-    public Gifts(String name, int quantity, int point, byte[] image) {
+    public Gifts(String name, int quantity, int point, String image) {
         this.name = name;
-        this.image = image;
+        this.image = Base64.getDecoder().decode(image);
         this.quantity = quantity;
         this.point = point;
     }

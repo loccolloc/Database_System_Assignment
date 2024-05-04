@@ -40,7 +40,7 @@ Content-Type: application/json
   "list_price": 1,
   "discount": 0.1,
   "state": "available",
-  "image": []
+  "image": ""
 }
 
 ###
@@ -55,7 +55,7 @@ Content-Type: application/json
 
 {
   "name": "gau bong",
-  "image": [],
+  "image": "",
   "quantity": 1,
   "point": -100000
 }
