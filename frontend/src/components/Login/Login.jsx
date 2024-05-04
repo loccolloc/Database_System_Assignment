@@ -46,9 +46,9 @@ export default function Login() {
             if (response.data && response.data.data === true) {
                
                 window.localStorage.setItem('username', response.data.username);
-                window.localStorage.setItem('role', response.data.role);
-
-                if(response.data.role==="user")
+                window.localStorage.setItem('role', response.data.role.trim());
+                
+                if(response.data.role.trim()==="user")
                 {
                     navigate('/listproducts');
                 }else{

@@ -4,7 +4,8 @@ import EditPassword from './EditPassword'
 import EditUsername from './EditUsername'
 import axios from "axios";
 import { useEffect } from "react";
-import {  toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const Profile = () => {
   
   const [displayName, setdisplayName] = useState("");
@@ -17,19 +18,45 @@ const Profile = () => {
     const uname= window.localStorage.getItem('username');
 
     axios.get(`http://localhost:8080/login/getprofile?username=${uname}`).then((res) => {
-    
-      setdisplayName(res.data.data.display_name);
-      setUsername(res.data.data.username);
-      setPassword(res.data.data.password);
-      setRole(res.data.data.role);
+      setdisplayName(res.data.data[0].display_name);
+      setUsername(res.data.data[0].username);
+      setPassword(res.data.data[0].password);
+      setRole(res.data.data[0].role);
     });
   }, []);
 
-
+  const showSuccessMessage = () => {
+    toast.success("DELETE Info successfully!!!");
+  };
+  const showFailMessage = () => {
+    toast.error("delete failed!!!");
+  };
+ 
   const handleFormSubmit = (e) => {
     e.preventDefault();
    
   };
+   
+  const handleDeleteAccount = async () => {
+    console.log("tai khoan se duoc xoa: ",username,password );
+    await axios
+      .delete(`http://localhost:8080/login/delete?username=${username}&password=${password}`)
+      .then((res) => {
+        if (res.data.data === 0) {
+          showSuccessMessage(); 
+        } else if (res.data.data === 4) {
+          toast.error("This account cannot be deleted because an order in progress is currently assigned to the account!");
+        } else {
+          showFailMessage();
+        }
+      })
+      .catch((error) => {
+        toast.error("Error in deleting account!");
+        console.error("Error during account deletion:", error);
+      });
+  };
+  
+  
   
   const handleEditInfo = async (e) => {
     e.preventDefault();
@@ -50,7 +77,7 @@ const Profile = () => {
             position: toast.POSITION.TOP_CENTER,
           });
         } else {
-          toast.warning("Update failed!!!", {
+          toast.warning("Delete failed!!!", {
             position: toast.POSITION.TOP_CENTER,
           });
         }
@@ -59,7 +86,9 @@ const Profile = () => {
 
   return (
     <div className="grid m-4 gap-y-4">
+       <ToastContainer />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
         <div 
         
           className="text-xl md:text-3xl font-semibold"
@@ -69,7 +98,7 @@ const Profile = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-2/4">
           <EditUsername/>
-          <EditPassword/>
+          <EditPassword username={username} />
         </div>
       </div>
       <form onSubmit={(e) => handleEditInfo(e)}>
@@ -115,7 +144,6 @@ const Profile = () => {
               
                 name="role"
                 value={role}
-                // onChange={(e) => setAddress(e.target.value)}
                 disabled={onEdit}
               />
             </div>
@@ -123,7 +151,7 @@ const Profile = () => {
          
           <div className="grid grid-cols-1 gap-4 mt-3">
   <div className="flex justify-between">
-    <Button type="submit" >
+    <Button type="submit" onClick={()=>{handleDeleteAccount()}} >
       Xóa tài khoản
     </Button>
     <Button type="submit">
