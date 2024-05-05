@@ -59,7 +59,7 @@ const Gift = () => {
     axios.get("/gifts/all")
       .then(response => {
         setGiftData(response.data);
-        console.log(response.data);
+        console.log("gift data: ",response.data);
       })
       .catch(error => console.error('Failed to fetch products:', error));
   }, []); 
@@ -165,19 +165,29 @@ const Gift = () => {
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
        {role !== "admin" && (
+          <>
         <Tooltip title="Claim">
           <IconButton  color="black" onClick={() => console.log('Delete action', row.original.id)}>
           <i style={{ fontSize: '30px', textAlign:'center' }}  className="text-center fa fa-hand-paper"></i>
           </IconButton>
         </Tooltip>
+        <Tooltip title={(point >= row.original.point)&& row.original.quantity>0 ? "Enough points to claim" : "Not enough points to claim"}>
+      <IconButton color={(point >= row.original.point)&& row.original.quantity>0 ? "success" : "error"}>
+        <i className="material-icons">{(point >= row.original.point)&& row.original.quantity>0 ? "Enough" : "Not enough"}</i>
+      </IconButton>
+    </Tooltip>
+        </>
        )}
-        {role !== "user" && (
-        <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => handleDeleteProduct(row.original.id)}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-         )}
+       {role !== "user" && (
+    <Tooltip title="Delete">
+      <IconButton color="error" onClick={() => handleDeleteProduct(row.original.id)}>
+        <DeleteIcon />
+      </IconButton>
+    </Tooltip>
+    
+
+)}
+
       </Box>
     ),
    

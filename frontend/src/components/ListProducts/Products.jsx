@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 function Products(props) {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate('/detail'); 
+    
+    navigate(`/detail/${props.id}`); 
   };
   return (
     <div className='productList' onClick={handleClick}>
@@ -36,7 +37,7 @@ function Products(props) {
   );
 }
 
-// Define prop types for the Products component
+
 Products.propTypes = {
   id: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,

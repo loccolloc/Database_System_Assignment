@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Hero from "./components/Hero/Hero";
 import Navbar from "./components/Navbar/Navbar";
 import Services from "./components/Services/Services.jsx";
@@ -8,17 +9,17 @@ import Testimonials from "./components/Testimonials/Testimonials.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import AOS from "aos";
 import Login from './components/Login/Login.jsx';
-import Signup from "./components/Signup/Signup.jsx"
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Signup from "./components/Signup/Signup.jsx";
 import DashProducts from "../src/components/DashProducts/DashProducts.jsx";
 import ListProducts from "./components/ListProducts/ListProducts.jsx";
-import "aos/dist/aos.css";
 import DashGift from "./components/DashGift/DashGift.jsx";
 import MainDashboard from "../src/components/Dashboard/MainDashboard.jsx";
 import Cart from '../src/components/Cart/Cart.jsx';
 import Invoice from "../src/components/Invoice/Invoice.jsx";
 import ProductDetail from "../src/components/ProductDetail/ProductDetail.jsx";
-import Profile from "../src/components/Profile/Profile.jsx"
+import Profile from "../src/components/Profile/Profile.jsx";
+import ProtectedRoute from './ProtectedRoute'; 
+
 const App = () => {
   React.useEffect(() => {
     AOS.init({
@@ -32,22 +33,19 @@ const App = () => {
 
   return (
     <Router>
-
-    <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-x-hidden">
-      <Navbar />
-      <Routes>
-
-      <Route path="/login" element={<Login />} />
-      <Route path="/products" element={<DashProducts />} />
-      <Route path="/dashboard" element={<MainDashboard />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/listproducts" element={<ListProducts />} />
-      <Route path="/gift" element={<DashGift />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/invoice" element={<Invoice />} />
-      <Route path="/detail" element={<ProductDetail />} />
-      <Route path="/profile" element={<Profile />} />
-      
+      <div className="bg-white dark:bg-gray-900 dark:text-white duration-200 overflow-x-hidden">
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/products" element={<DashProducts />} />
+          <Route path="/dashboard" element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/listproducts" element={<ListProducts />} />
+          <Route path="/gift" element={<ProtectedRoute><DashGift /></ProtectedRoute>} />
+          <Route path="/cart" element={<ProtectedRoute blockRole="admin"><Cart /></ProtectedRoute>} />
+          <Route path="/invoice" element={<ProtectedRoute><Invoice /></ProtectedRoute>} />
+          <Route path="/detail/:id" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/" element={
             <>
               <Hero />
@@ -56,13 +54,13 @@ const App = () => {
               <AppStore />
               <Testimonials />
               <Footer />
-              
             </>
           } />
-      </Routes>
-    </div>
+        
+          <Route path="*" element={<Navigate replace to="/" />} />
+        </Routes>
+      </div>
     </Router>
-
   );
 };
 
