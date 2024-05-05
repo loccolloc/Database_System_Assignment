@@ -1,5 +1,6 @@
 package com.coffeeshop.coffeeshop.service;
 
+import com.coffeeshop.coffeeshop.dto.ProductDTO;
 import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.entity.Products;
 
@@ -8,7 +9,7 @@ import java.util.List;
 public interface ProductService {
     List<Products> getAllProducts();
 
-    List<Gifts> availableGift(String username);
+    Gifts[] availableGift(String username);
 
     int exchangeGifts(int id, int quantity, int price);
 
@@ -17,4 +18,12 @@ public interface ProductService {
     int postProduct(Products product);
 
     int deleteProduct(int id);
+
+    List<Products> getAllProductsByType(String type);
+
+    List<Products> getAllProductsByName(String name);
+
+    int putProduct(ProductDTO productDTO);
+
+    int putImage(String name, String image);
 }

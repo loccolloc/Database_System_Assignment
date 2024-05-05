@@ -1,5 +1,6 @@
 package com.coffeeshop.coffeeshop.controller;
 
+import com.coffeeshop.coffeeshop.dto.GiftDTO;
 import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.service.GiftService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,14 @@ public class GiftController {
         return giftService.deleteGift(id);
     }
 
+    @PutMapping("/put")
+    public int putGift(@RequestBody GiftDTO giftDTO) {
+        return giftService.putGift(giftDTO);
+    }
+
+    @PutMapping("/putImage")
+    public int putImage(@RequestBody GiftDTO giftDTO) {
+        return giftService.putImage(giftDTO.getName(), giftDTO.getImage());
+    }
 }
 

@@ -68,3 +68,51 @@ GET http://localhost:8080/products/all
 
 ###
 GET http://localhost:8080/gifts/all
+
+###
+GET http://localhost:8080/products/getByType?
+    type=Cà phê
+
+###
+GET http://localhost:8080/products/getByName?
+    name=Trà sữa truyền thống
+
+###
+PUT http://localhost:8080/products/put
+Content-Type: application/json
+
+{
+  "name": "Trà sữa ô long",
+  "type": "Trà sữa",
+  "list_price": "30000",
+  "discount": "0.0",
+  "state": "unavailable"
+}
+
+###
+PUT http://localhost:8080/products/putImage
+Content-Type: application/json
+
+{
+  "name": "Trà sữa ô long",
+  "image": ""
+}
+
+###
+PUT http://localhost:8080/gifts/put
+Content-Type: application/json
+
+{
+  "name": "gau bong",
+  "quantity": 2,
+  "point": 30000
+}
+
+###
+PUT http://localhost:8080/gifts/putImage
+Content-Type: application/json
+
+{
+  "name": "gau bong",
+  "image": ""
+}
