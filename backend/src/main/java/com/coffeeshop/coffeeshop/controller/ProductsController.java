@@ -65,4 +65,14 @@ public class ProductsController {
     public int putImage(@RequestBody ProductDTO productDTO){
         return productService.putImage(productDTO.getName(), productDTO.getImage());
     }
+
+    @GetMapping("/getAllByPriceAsc")
+    public List<Products> getAllProductsByPriceAsc(){
+        return productService.getAllProductsByPriceAsc();
+    }
+
+    @GetMapping("/getAllByPriceDesc")
+    public List<Products> getAllProductsByPriceDesc(){
+        return productService.getAllProductsByPriceDesc();
+    }
 }

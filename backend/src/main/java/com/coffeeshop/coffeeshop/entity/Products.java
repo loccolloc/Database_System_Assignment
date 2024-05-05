@@ -20,7 +20,7 @@ public class Products {
 
     private String type;
     @Column(name="list_price",nullable = false)
-    private int list_price;
+    private int listPrice;
     @Column(name="discount",precision = 3, scale = 2)
     private BigDecimal discount = BigDecimal.ZERO;
     @Column(name="state")
@@ -36,7 +36,7 @@ public class Products {
     Products(String name, String type, int list_price, double discount, String state, String image){
         this.name = name;
         this.type = type;
-        this.list_price = list_price;
+        this.listPrice = list_price;
         this.discount = new BigDecimal(discount);
         this.state = state;
         this.image = Base64.getDecoder().decode(image);

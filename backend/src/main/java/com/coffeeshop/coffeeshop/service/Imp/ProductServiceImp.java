@@ -7,6 +7,7 @@ import com.coffeeshop.coffeeshop.repository.ProductRepository;
 import com.coffeeshop.coffeeshop.service.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -76,7 +77,7 @@ public class ProductServiceImp implements ProductService {
         if(products.size() == 1){
             Products product = products.getFirst();
             product.setType(productDTO.getType());
-            product.setList_price(productDTO.getList_price());
+            product.setListPrice(productDTO.getList_price());
             product.setDiscount(BigDecimal.valueOf(productDTO.getDiscount()));
             product.setState(productDTO.getState());
             return 0;
@@ -92,5 +93,15 @@ public class ProductServiceImp implements ProductService {
             product.setImage(Base64.getDecoder().decode(image));
             return 0;
         } else return -1;
+    }
+
+    @Override
+    public List<Products> getAllProductsByPriceAsc() {
+        return productRepository.findAll(Sort.by("listPrice"));
+    }
+
+    @Override
+    public List<Products> getAllProductsByPriceDesc() {
+        return productRepository.findAll(Sort.by("listPrice").descending());
     }
 }
