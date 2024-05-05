@@ -1,16 +1,15 @@
 package com.coffeeshop.coffeeshop.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Base64;
 
 @Data
 @Entity(name="Products")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +33,14 @@ public class Products {
     @Column(name="rating",precision = 3, scale = 2)
     private BigDecimal rating;
 
-    Products(String name, String type, int list_price, double discount, String state, byte[] image){
+    Products(String name, String type, int list_price, double discount, String state, String image){
         this.name = name;
         this.type = type;
         this.list_price = list_price;
         this.discount = new BigDecimal(discount);
         this.state = state;
-        this.image = image;
+        this.image = Base64.getDecoder().decode(image);
 
     }
+
 }
