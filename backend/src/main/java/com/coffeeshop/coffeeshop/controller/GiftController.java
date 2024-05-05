@@ -25,6 +25,11 @@ public class GiftController {
         return giftService.getGiftById(id);
     }
 
+    @GetMapping("/getByName")
+    public List<Gifts> getGiftByName(@RequestParam String name) {
+        return giftService.getGiftByName(name);
+    }
+
     @PostMapping("/post")
     public int postGift(@RequestBody Gifts gift) {
         return giftService.postGift(gift);

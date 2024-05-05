@@ -4,9 +4,11 @@ import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.entity.Products;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ProductRepository extends JpaRepository<Products, Integer> {
     @Query(value = "exec Available_gift ?1 ", nativeQuery = true)
     Gifts[] availableGift(String username);

@@ -116,3 +116,22 @@ Content-Type: application/json
   "name": "gau bong",
   "image": ""
 }
+
+###
+GET http://localhost:8080/products/getAllByPriceAsc
+
+###
+GET http://localhost:8080/products/getAllByPriceDesc
+
+###
+GET http://localhost:8080/order/all
+
+###
+GET http://localhost:8080/order/get/1
+
+###
+GET http://localhost:8080/order/getByUserId/4
+
+###
+GET http://localhost:8080/gifts/getByName?
+    name=gau bong

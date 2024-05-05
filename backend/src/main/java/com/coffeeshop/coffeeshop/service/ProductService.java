@@ -26,4 +26,8 @@ public interface ProductService {
     int putProduct(ProductDTO productDTO);
 
     int putImage(String name, String image);
+
+    List<Products> getAllProductsByPriceAsc();
+
+    List<Products> getAllProductsByPriceDesc();
 }

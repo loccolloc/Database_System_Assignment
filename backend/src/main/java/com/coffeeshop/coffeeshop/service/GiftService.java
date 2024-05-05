@@ -17,4 +17,6 @@ public interface GiftService {
     int putGift(GiftDTO gift);
 
     int putImage(String name, String image);
+
+    List<Gifts> getGiftByName(String name);
 }

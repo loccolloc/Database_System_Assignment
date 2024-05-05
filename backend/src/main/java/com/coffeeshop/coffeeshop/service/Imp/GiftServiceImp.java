@@ -32,6 +32,11 @@ public class GiftServiceImp implements GiftService {
     }
 
     @Override
+    public List<Gifts> getGiftByName(String name) {
+        return giftRepository.findAllByName(name);
+    }
+
+    @Override
     public int postGift(Gifts gift) {
         try {
             giftRepository.save(gift);
