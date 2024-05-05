@@ -65,14 +65,14 @@ function NavbarProducts() {
           </div>
         </div>
 
-        {role !== "admin" && (
+      
         <div className="nav-links w-full hover-effect "  onClick={() => navigate('/gift')}> 
         <div className="flex space-x-3 w-full p-2 rounded  hover-effect ">
             <BarChart3Icon />
             <span className={!isExpanded ? "hidden" : "block"}>Gift</span>
           </div>
         </div>
-  )}
+ 
 
         <div className="nav-links w-full">
           <div className="flex space-x-3 w-full p-2 rounded">

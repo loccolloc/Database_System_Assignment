@@ -5,7 +5,8 @@ import { MRT_EditActionButtons, MaterialReactTable, useMaterialReactTable } from
 import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 const ImageCell = ({ cell }) => (
   <img src={`data:image/png;base64,${cell.getValue()}`} alt="Product" style={{ width: '100px', height: 'auto' }} />
 );
@@ -21,7 +22,17 @@ const Products = () => {
   const [imageFile, setImageFile] = useState(null);
   const [editImageFile, setEditImageFile] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
-
+  const handleDeleteProduct = (productId) => {
+    const axios = createApiClient();
+    console.log("id xoa",productId);
+    axios.delete(`http://localhost:8080/products/delete/${productId}`)
+      .then(response => {
+        console.log('Product deleted:', response.data);
+        toast.success("Deleted product!!!");
+        setProductData(currentData => currentData.filter(item => item.id !== productId));
+      })
+      .catch(toast.error("Deleted product fail!!!"));
+  };
   useEffect(() => {
     const axios = createApiClient();
     axios.get("/products/all")
@@ -140,7 +151,7 @@ const Products = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => console.log('Delete action', row.original.id)}>
+          <IconButton color="error" onClick={() => handleDeleteProduct(row.original.id)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -154,6 +165,7 @@ const Products = () => {
   return (
     <div>
       <h1 className='font-bold' style={{ fontSize: '30px', textAlign: 'center', marginTop: '8px' }}>Products</h1>
+      <ToastContainer />
       <MaterialReactTable table={table} />
     </div>
   );
