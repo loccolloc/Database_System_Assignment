@@ -64,7 +64,7 @@ const Products = () => {
     { accessorKey: 'name', header: 'Name', muiEditTextFieldProps: { required: true, error: !!validationErrors.name, helperText: validationErrors.name, onFocus: () => setValidationErrors({ ...validationErrors, name: undefined }) } },
     { accessorKey: 'type', header: 'Type', muiEditTextFieldProps: { required: true, error: !!validationErrors.type, helperText: validationErrors.type, onFocus: () => setValidationErrors({ ...validationErrors, type: undefined }) } },
     { accessorKey: 'image', header: 'Image', Cell: ImageCell },
-    { accessorKey: 'list_price', header: 'List Price', muiEditTextFieldProps: { required: true, error: !!validationErrors.list_price, helperText: validationErrors.list_price, onFocus: () => setValidationErrors({ ...validationErrors, list_price: undefined }) } },
+    { accessorKey: 'listPrice', header: 'List Price', muiEditTextFieldProps: { required: true, error: !!validationErrors.listPrice, helperText: validationErrors.listPrice, onFocus: () => setValidationErrors({ ...validationErrors, listPrice: undefined }) } },
   ], [validationErrors]);
 
   const table = useMaterialReactTable({
@@ -82,7 +82,7 @@ const Products = () => {
       const formData = new FormData();
       formData.append('name', values.name);
       formData.append('type', values.type);
-      formData.append('list_price', values.list_price);
+      formData.append('listPrice', values.listPrice);
       if (imageFile) {
         formData.append('image', imageFile);
       }
@@ -103,7 +103,7 @@ const Products = () => {
       const formData = new FormData();
       formData.append('name', values.name);
       formData.append('type', values.type);
-      formData.append('list_price', values.list_price);
+      formData.append('listPrice', values.listPrice);
       if (editImageFile) {
         formData.append('image', editImageFile);
       }
