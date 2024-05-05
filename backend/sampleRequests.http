@@ -135,3 +135,55 @@ GET http://localhost:8080/order/getByUserId/4
 ###
 GET http://localhost:8080/gifts/getByName?
     name=gau bong
+
+###
+GET http://localhost:8080/login/availableGift?
+    username=Hung
+
+###
+GET http://localhost:8080/login/exGifts?
+    account_id=0&
+    gift_id=1&
+    quantity=2
+
+###
+GET http://localhost:8080/review/all
+
+###
+GET http://localhost:8080/review/get?
+    user_id=3&
+    product_id=4
+
+###
+GET http://localhost:8080/review/getByUserId/3
+
+###
+GET http://localhost:8080/review/getByProductId/4
+
+
+###
+POST http://localhost:8080/review/post
+Content-Type: application/json
+
+{
+  "comment": "Quá gà",
+  "score": 0,
+  "customer_id": 7,
+  "product_id": 3
+}
+
+###
+DELETE http://localhost:8080/review/delete?
+    user_id=5&
+    product_id=3
+
+###
+PUT http://localhost:8080/review/put
+Content-Type: application/json
+
+{
+  "comment": "quá gà",
+  "score": 3,
+  "customer_id": 3,
+  "product_id": 5
+}

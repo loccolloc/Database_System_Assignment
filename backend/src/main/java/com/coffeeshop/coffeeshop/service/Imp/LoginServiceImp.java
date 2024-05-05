@@ -2,6 +2,7 @@ package com.coffeeshop.coffeeshop.service.Imp;
 
 import com.coffeeshop.coffeeshop.dto.AccountsDTO;
 import com.coffeeshop.coffeeshop.entity.Accounts;
+import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.payload.request.SignUpRequest;
 import com.coffeeshop.coffeeshop.repository.AccountsRepository;
 import com.coffeeshop.coffeeshop.service.LoginService;
@@ -71,5 +72,27 @@ public class LoginServiceImp implements LoginService {
     @Override
     public int deleteAccount(String username, String password) {
         return accountsRepository.deleteAccount(username, password);
+    }
+
+    @Override
+    public List<Gifts> availableGift(String username) {
+        List<Object[]> result = accountsRepository.availableGift(username);
+
+        List<Gifts> giftsList = new ArrayList<>();
+        for (Object[] objects : result) {
+            Gifts gift = new Gifts();
+            gift.setId(-1);
+            gift.setName((String) objects[0]);
+            gift.setQuantity((int) objects[1]);
+            gift.setPoint((int) objects[2]);
+            gift.setImage((byte[]) objects[3]);
+            giftsList.add(gift);
+        }
+        return giftsList;
+    }
+
+    @Override
+    public int exchangeGifts(int account_id, int gift_id, int quantity) {
+        return accountsRepository.exGifts(account_id, gift_id, quantity);
     }
 }

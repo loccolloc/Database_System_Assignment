@@ -2,6 +2,7 @@ package com.coffeeshop.coffeeshop.controller;
 
 import com.coffeeshop.coffeeshop.dto.AccountsDTO;
 import com.coffeeshop.coffeeshop.entity.Accounts;
+import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.payload.ResponseData;
 import com.coffeeshop.coffeeshop.payload.request.SignUpRequest;
 import com.coffeeshop.coffeeshop.repository.AccountsRepository;
@@ -71,5 +72,13 @@ public class LoginController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
+    @GetMapping("/availableGift")
+    public List<Gifts> availableGift(@RequestParam String username){
+        return loginService.availableGift(username);
+    }
 
+    @GetMapping("/exGifts")
+    public int exchangeGifts(@RequestParam int account_id, @RequestParam int gift_id, @RequestParam int quantity){
+        return loginService.exchangeGifts(account_id, gift_id, quantity);
+    }
 }

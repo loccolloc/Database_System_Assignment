@@ -1,7 +1,6 @@
 package com.coffeeshop.coffeeshop.controller;
 
 import com.coffeeshop.coffeeshop.dto.ProductDTO;
-import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.entity.Products;
 import com.coffeeshop.coffeeshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +33,6 @@ public class ProductsController {
     @DeleteMapping("/delete/{id}")
     public int deleteProduct(@PathVariable int id) {
         return productService.deleteProduct(id);
-    }
-
-    @GetMapping("/availableGift")
-    public Gifts[] availableGift(@RequestParam String username){
-        return productService.availableGift(username);
-    }
-
-    @GetMapping("/exGifts")
-    public int exchangeGifts(@RequestParam int id, @RequestParam int quantity, @RequestParam int price){
-        return productService.exchangeGifts(id, quantity, price);
     }
 
     @GetMapping("/getByType")

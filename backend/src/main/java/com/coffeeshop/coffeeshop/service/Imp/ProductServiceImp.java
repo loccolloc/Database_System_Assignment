@@ -1,7 +1,6 @@
 package com.coffeeshop.coffeeshop.service.Imp;
 
 import com.coffeeshop.coffeeshop.dto.ProductDTO;
-import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.entity.Products;
 import com.coffeeshop.coffeeshop.repository.ProductRepository;
 import com.coffeeshop.coffeeshop.service.ProductService;
@@ -24,15 +23,7 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findAll();
     }
 
-    @Override
-    public Gifts[] availableGift(String username) {
-        return productRepository.availableGift(username);
-    }
 
-    @Override
-    public int exchangeGifts(int id, int quantity, int price) {
-        return productRepository.exGifts(id, quantity, price);
-    }
 
     @Override
     public Products getProductById(int id) {

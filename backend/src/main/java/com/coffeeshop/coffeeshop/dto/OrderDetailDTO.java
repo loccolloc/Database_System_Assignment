@@ -8,4 +8,5 @@ public class OrderDetailDTO {
     private int product_id;
     private int cost;
     private int quantity;
+    private String image;
 }
