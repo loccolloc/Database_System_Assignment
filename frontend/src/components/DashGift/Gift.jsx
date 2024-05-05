@@ -16,8 +16,9 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Tooltip,
+  Tooltip,InputAdornment,TextField
 } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 
 
@@ -195,6 +196,18 @@ const Gift = () => {
 
   return<div>
    <h1 className='font-bold' style={{ fontSize: '30px', textAlign:'center',marginTop:'8px' }}>Customer rewards</h1>
+   <TextField 
+        style={{ margin: '20px auto', display: 'block' }}
+        placeholder="Search Gifts"
+        
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
    <ToastContainer />
    {role !== "admin" && (<div className='mb-10 ml-10 mt-10 font-bold' style={{ fontSize: '20px' }}> Your Point: {point} <i style={{ color: '#F28A00' }} className="fa-solid fa-coins fs-3  "></i></div>)}
    <MaterialReactTable table={table} />;

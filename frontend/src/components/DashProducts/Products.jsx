@@ -2,10 +2,12 @@ import React, { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import createApiClient from "../../api/axios";
 import { MRT_EditActionButtons, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, TextField } from '@mui/material';
+import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, TextField ,InputAdornment} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from "react-toastify";
+import SearchIcon from '@mui/icons-material/Search';
+
 import 'react-toastify/dist/ReactToastify.css';
 const ImageCell = ({ cell }) => (
   <img src={`data:image/png;base64,${cell.getValue()}`} alt="Product" style={{ width: '100px', height: 'auto' }} />
@@ -22,6 +24,8 @@ const Products = () => {
   const [imageFile, setImageFile] = useState(null);
   const [editImageFile, setEditImageFile] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
+  const [searchQuery, setSearchQuery] = useState(""); 
+
   const handleDeleteProduct = (productId) => {
     const axios = createApiClient();
     console.log("id xoa",productId);
@@ -31,14 +35,15 @@ const Products = () => {
         toast.success("Deleted product!!!");
         setProductData(currentData => currentData.filter(item => item.id !== productId));
       })
-      .catch(toast.error("Deleted product fail!!!"));
+      .catch(err=>{toast.error(err)});
   };
   useEffect(() => {
     const axios = createApiClient();
-    axios.get("/products/all")
+    const query = searchQuery.trim() ? `/products/getByName?name=${encodeURIComponent(searchQuery)}` : '/products/all';
+    axios.get(query)
       .then(response => setProductData(response.data))
       .catch(error => console.error('Failed to fetch products:', error));
-  }, []);
+  }, [searchQuery]); 
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -165,6 +170,19 @@ const Products = () => {
   return (
     <div>
       <h1 className='font-bold' style={{ fontSize: '30px', textAlign: 'center', marginTop: '8px' }}>Products</h1>
+      <TextField // Search input
+        style={{ margin: '20px auto', display: 'block' }}
+        placeholder="Search Products"
+        value={searchQuery}
+        onChange={e => setSearchQuery(e.target.value)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
       <ToastContainer />
       <MaterialReactTable table={table} />
     </div>
