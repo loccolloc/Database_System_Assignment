@@ -3,10 +3,8 @@ package com.coffeeshop.coffeeshop.mapper;
 import com.coffeeshop.coffeeshop.dto.OnlineOrderDTO;
 import com.coffeeshop.coffeeshop.dto.OrderDetailDTO;
 import com.coffeeshop.coffeeshop.dto.ProductDTO;
-import com.coffeeshop.coffeeshop.entity.Online_orders;
-import com.coffeeshop.coffeeshop.entity.Order_details;
-import com.coffeeshop.coffeeshop.entity.Orders;
-import com.coffeeshop.coffeeshop.entity.Products;
+import com.coffeeshop.coffeeshop.dto.ReviewDTO;
+import com.coffeeshop.coffeeshop.entity.*;
 import com.coffeeshop.coffeeshop.repository.OrderDetailRepository;
 import com.coffeeshop.coffeeshop.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +52,7 @@ public class DTOMapper {
         orderDetailDTO.setProduct_id(orderDetail.getProductId());
         orderDetailDTO.setQuantity(orderDetail.getQuantity());
         orderDetailDTO.setCost(orderDetail.getCost());
+        orderDetailDTO.setImage(Base64.getEncoder().encodeToString(orderDetail.getProducts().getImage()));
         return orderDetailDTO;
     }
 
@@ -77,5 +76,23 @@ public class DTOMapper {
             onlineOrderDTO.getOrder_details().add(toOrderDetailDTO(orderDetail));
         }
         return onlineOrderDTO;
+    }
+
+    public ReviewDTO toReviewDTO(Reviews review) {
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setComment(review.getComment());
+        reviewDTO.setScore(review.getScore());
+        reviewDTO.setCustomer_id(review.getCustomerId());
+        reviewDTO.setProduct_id(review.getProductId());
+        return reviewDTO;
+    }
+
+    public Reviews toReviewEntity(ReviewDTO reviewDTO) {
+        Reviews review = new Reviews();
+        review.setComment(reviewDTO.getComment());
+        review.setScore(reviewDTO.getScore());
+        review.setCustomerId(reviewDTO.getCustomer_id());
+        review.setProductId(reviewDTO.getProduct_id());
+        return review;
     }
 }

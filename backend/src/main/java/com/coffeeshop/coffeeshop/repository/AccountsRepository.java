@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public interface AccountsRepository extends JpaRepository<Accounts, Integer> {
@@ -27,4 +29,12 @@ public interface AccountsRepository extends JpaRepository<Accounts, Integer> {
             "exec @result = Delete_account @username = ?1, @password = ?2 " +
             "select @result", nativeQuery = true)
     int deleteAccount(String username, String password);
+
+    @Query(value = "exec Available_gift ?1 ", nativeQuery = true)
+    List<Object[]> availableGift(String username);
+
+    @Query(value = "declare @result int " +
+            "exec @result = Ex_gifts ?1, ?2, ?3 " +
+            "select @result", nativeQuery = true)
+    int exGifts(int account_id, int gift_id, int quantity);
 }
