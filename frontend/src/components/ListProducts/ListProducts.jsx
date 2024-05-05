@@ -1,51 +1,61 @@
-import Products from "./Products"; 
-import "./styles.css"; 
 import React, { useState, useEffect } from "react";
-import createApiClient from "../../api/axios";
+import Products from "./Products";
 import Pagination from "./Pagination";
+import createApiClient from "../../api/axios";
+import "./styles.css";
 
 export default function ListProducts() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6); 
+  const [itemsPerPage, setItemsPerPage] = useState(6);
   const [productData, setProductData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const fetchProductsByType = (type) => {
-    const axios = createApiClient();
-    const query = type ? `/products/getByType?type=${encodeURIComponent(type)}` : '/products/all';
+  const [sortOrder, setSortOrder] = useState('');
+
+  const axios = createApiClient();
+
+  const fetchProductsByType = (type = '', order = '') => {
+    let query = type ? `/products/getByType?type=${encodeURIComponent(type)}` : '/products/all';
+    if (order) {
+      query = `/products/${order}`;
+    }
     axios.get(query)
       .then(response => {
         setProductData(response.data);
-        setSearchQuery(""); 
+        setSearchQuery(""); // Clear search query upon fetching
       })
       .catch(error => {
         console.error("Failed to fetch products by type:", error);
       });
   };
+
   useEffect(() => {
-    fetchProductsByType(""); 
+    fetchProductsByType();
   }, []);
+
   useEffect(() => {
-    const axios = createApiClient();
-   
     const query = searchQuery.trim() ? `/products/getByName?name=${encodeURIComponent(searchQuery)}` : '/products/all';
-    axios
-      .get(query)
+    axios.get(query)
       .then((response) => {
-        if (response.data.length > 0) { 
+        if (response.data.length > 0) {
           setProductData(response.data);
         }
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [searchQuery]); 
-  
+  }, [searchQuery]);
+
+  useEffect(() => {
+    fetchProductsByType('', sortOrder);
+  }, [sortOrder]);
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = productData.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const handleSearchChange = (event) => setSearchQuery(event.target.value);
+  const handleSortChange = (event) => setSortOrder(event.target.value);
 
   return (
     <div className="products-container">
@@ -53,28 +63,31 @@ export default function ListProducts() {
         Products
       </h1>
       <input
-        style={{ marginLeft: 520, marginRight:520, marginTop:40, padding:3, fontSize:17, background: 'transparent',    border: '1px solid black'
-      }}
+        style={{ marginLeft: 520, marginRight:520, marginTop:40, padding:3, fontSize:17, background: 'transparent',    border: '1px solid black'}}
         type="text"
         placeholder="Search Products"
         value={searchQuery}
         onChange={handleSearchChange}
         className="search-input"
       />
-<div className="d-flex mt-5">
-<button onClick={() => fetchProductsByType('')}  type="button" style={{ fontSize: 20, marginLeft: 'auto', color: 'black', marginRight: 5 }} className="btn btn-danger">
+      <div className="d-flex mt-5">
+        <button onClick={() => fetchProductsByType('')}  type="button" style={{ fontSize: 20, marginLeft: 'auto', color: 'black', marginRight: 5 }} className="btn btn-danger">
           All
         </button> 
-<button onClick={() => fetchProductsByType('Trà')} type="button" style={{ fontSize: 20,  color: 'black', marginRight: 5 }} className="btn btn-success">
+        <button onClick={() => fetchProductsByType('Trà')} type="button" style={{ fontSize: 20,  color: 'black', marginRight: 5 }} className="btn btn-success">
           Trà
-        </button>     <button onClick={() => fetchProductsByType('Cà phê')} type="button" style={{ fontSize: 20, marginRight: 'auto', color: 'black' }} className="btn btn-warning">
+        </button>
+        <button onClick={() => fetchProductsByType('Cà phê')} type="button" style={{ fontSize: 20, marginRight: 5, color: 'black' }} className="btn btn-warning">
           Coffee
         </button>
-</div>
-     
-     
+        <select onChange={handleSortChange} style={{ fontSize: 20, marginRight: 'auto', color: 'black' }}>
+          <option value="">Select Sorting</option>
+          <option value="getAllByPriceAsc">Price Low to High</option>
+          <option value="getAllByPriceDesc">Price High to Low</option>
+        </select>
+      </div>
       <div className="App">
-        {currentItems.map((item) => (
+        {currentItems.map(item => (
           <Products
             key={item.id}
             id={item.id}
@@ -82,7 +95,7 @@ export default function ListProducts() {
             name={item.name}
             type={item.type}
             state={item.state}
-            list_price={item.list_price}
+            list_price={item.listPrice}
             discount={item.discount}
             rating={item.rating}
           />

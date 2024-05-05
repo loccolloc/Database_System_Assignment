@@ -71,7 +71,7 @@ const ProductDetail = () => {
           <span className="font-normal">{productDetailItem.type}</span>
         </p>
         <p className="mt-4 text-4xl font-bold text-violet-900">
-          ${productDetailItem.list_price}{" "}
+          ${productDetailItem.listPrice}{" "}
         </p>
         <p className="mt-5 font-bold">
         

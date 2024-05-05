@@ -37,6 +37,8 @@ const Gift = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [giftData, setGiftData] = useState([]);
   const [point, setPoint] = useState("");
+  const [searchQuery, setSearchQuery] = useState(""); 
+
   const handleDeleteProduct = (productId) => {
     const axios = createApiClient();
     console.log("id xoa",productId);
@@ -57,13 +59,13 @@ const Gift = () => {
     
     setPoint(res.data.data[0].point);
   });
-    axios.get("/gifts/all")
-      .then(response => {
-        setGiftData(response.data);
-        console.log("gift data: ",response.data);
-      })
-      .catch(error => console.error('Failed to fetch products:', error));
-  }, []); 
+  const query = searchQuery.trim() ? `/gifts/getByName?name=${encodeURIComponent(searchQuery)}` : '/gifts/all';
+
+  axios.get(query)
+  .then(response => setGiftData(response.data))
+  .catch(error => console.error('Failed to fetch products:', error));
+}, [searchQuery]); 
+
 
   const columns = useMemo(() => [
     {
@@ -199,7 +201,8 @@ const Gift = () => {
    <TextField 
         style={{ margin: '20px auto', display: 'block' }}
         placeholder="Search Gifts"
-        
+        value={searchQuery}
+        onChange={e => setSearchQuery(e.target.value)}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
