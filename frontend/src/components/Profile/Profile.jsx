@@ -97,7 +97,7 @@ const Profile = () => {
           Thông tin người dùng
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-2/4">
-          <EditUsername/>
+          {/* <EditUsername/> */}
           <EditPassword username={username} />
         </div>
       </div>

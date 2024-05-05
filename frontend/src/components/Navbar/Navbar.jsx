@@ -28,6 +28,7 @@ const Navbar = () => {
   };
   const handleLogoutClick = () => {
     localStorage.clear();
+    navigate('/'); 
         window.location.reload();
   };
   const handleProfileClick = () => {
