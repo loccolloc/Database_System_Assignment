@@ -39,7 +39,7 @@ export default function Login() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log(response.data);
+            console.log("profile: ",response.data);
           
             
 
@@ -47,7 +47,7 @@ export default function Login() {
                
                 window.localStorage.setItem('username', response.data.username);
                 window.localStorage.setItem('role', response.data.role.trim());
-                
+                window.localStorage.setItem('id', Number(response.data.id));
                 if(response.data.role.trim()==="user")
                 {
                     navigate('/listproducts');

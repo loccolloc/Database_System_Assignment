@@ -1,8 +1,22 @@
 import  {Component} from 'react';
 import styles from "./style.module.css";
+import React, { useEffect, useState } from 'react';
+export default function HeaderComponent() {
+  const [orderDetails, setOrderDetails] = useState([]);
+  const [order, setOrder] = useState({});
+  const id= window.localStorage.getItem('id');
 
-export default class HeaderComponent extends Component{
-  render(){
+
+  useEffect(() => {
+    console.log("id:", id);
+    fetch(`http://localhost:8080/order/getByUserId/${id}`)
+        .then(response => response.json())
+        .then((data) => {setOrderDetails(data[0].order_details);
+            setOrder(data[0]);
+            console.log("dâta: ",order);
+        })
+        .catch(error => console.error('Error fetching order details:', error));
+}, []);
     return(
         <div className="mt-8 ml-10 mr-10">
              <header>
@@ -10,10 +24,10 @@ export default class HeaderComponent extends Component{
              <h1 className="py-4 px-3 font-bold" style={{ fontSize: '17px' }}> INVOICE </h1>
       
 <address className='mt-3'>
-  <p className='font-bold' style={{ fontSize: '12px' }}> MAHESH NANDENNAGARI </p>
-  <p className='font-bold' style={{ fontSize: '12px' }}> #429, First Floor </p>
-  <p className='font-bold' style={{ fontSize: '12px' }}> Bettadasanapura </p>
-  <p className='font-bold' style={{ fontSize: '12px' }}> +918660876889 </p>
+  <p className='font-bold' style={{ fontSize: '12px' }}> </p>
+  <p className='font-bold' style={{ fontSize: '12px' }}> {order.delivery_address} </p>
+  <p className='font-bold' style={{ fontSize: '12px' }}> Acccount id: {order.account_id} </p>
+  <p className='font-bold' style={{ fontSize: '12px' }}> Employee id:  {order.employee_id} </p>
 </address>
 
 <span>
@@ -38,7 +52,7 @@ export default class HeaderComponent extends Component{
               </tr>
               <tr>
                 <th><span >Amount Due</span></th>
-                <td><span id="prefix" >$</span><span>600.00</span></td>
+                <td><span id="prefix" ></span><span></span></td>
               </tr>
               </tbody>
             </table>
@@ -54,29 +68,27 @@ export default class HeaderComponent extends Component{
                 </tr>
               </thead>
               <tbody>
-                <tr>
+              {orderDetails.map((item, index) => (<tr key={index}>
                 <td><a className={styles.cut}>-</a><span>Front End Consultation</span></td>
                   <td><span >Experience Review</span></td>
                   <td><span data-prefix>$</span><span >150.00</span></td>
-                  <td><span >4</span></td>
-                  <td><span data-prefix>$</span><span>600.00</span></td>
-                </tr>
+                  <td><span >{item.quantity}</span></td>
+                  <td><span data-prefix></span><span> {item.cost.toLocaleString('vi-VN')} đồng</span></td>
+                </tr>))}
+                
               </tbody>
             </table>
             <table className={`${styles.table} ${styles.firstTable}`}>
             <tbody>
               <tr>
                 <th><span >Total</span></th>
-                <td><span data-prefix>$</span><span>600.00</span></td>
+                <td><span data-prefix></span><span>      {(order.total_cost+order.delivery_charges).toLocaleString('vi-VN')} đồng</span></td>
               </tr>
               <tr>
                 <th><span >Amount Paid</span></th>
                 <td><span data-prefix>$</span><span >0.00</span></td>
               </tr>
-              <tr>
-                <th><span >Balance Due</span></th>
-                <td><span data-prefix>$</span><span>600.00</span></td>
-              </tr>
+             
               </tbody>
             </table>                      
           </article>
@@ -92,4 +104,3 @@ export default class HeaderComponent extends Component{
         </div>
     )
   }
-}
