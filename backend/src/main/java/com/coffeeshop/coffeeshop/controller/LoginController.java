@@ -33,6 +33,7 @@ public class LoginController {
             Accounts account = accountsRepository.findByUsernameAndPassword(username, password);
             responseData.setRole(account.getRole());
             responseData.setUsername(account.getUsername());
+            responseData.setId(account.getId());
        }else{
 
             responseData.setData(false);
