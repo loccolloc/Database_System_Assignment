@@ -1,6 +1,7 @@
 package com.coffeeshop.coffeeshop.controller;
 
 import com.coffeeshop.coffeeshop.dto.OnlineOrderDTO;
+import com.coffeeshop.coffeeshop.dto.OrderDetailDTO;
 import com.coffeeshop.coffeeshop.service.OnlineOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +40,24 @@ public class OrderController {
         return onlineOrderService.deleteOrder(id);
     }
 
-    @PutMapping("/put")
-    public int putOnlineOrder(@RequestBody OnlineOrderDTO OnlineOrderDTO) {
-        return onlineOrderService.putOrder(OnlineOrderDTO);
+    @PutMapping("/addProduct")
+    public int addProduct(@RequestBody OrderDetailDTO orderDetailDTO) {
+        return onlineOrderService.addProduct(orderDetailDTO);
+    }
+
+    @PutMapping("/removeProduct")
+    public int removeProduct(@RequestBody OrderDetailDTO orderDetailDTO) {
+        return onlineOrderService.removeProduct(orderDetailDTO);
+    }
+
+    @PutMapping("/updateProduct")
+    public int updateProduct(@RequestBody OrderDetailDTO orderDetailDTO) {
+        return onlineOrderService.updateProduct(orderDetailDTO);
+    }
+
+    @PutMapping("/setAsFinished/{id}")
+    public int setAsFinished(@PathVariable int id){
+        return onlineOrderService.setAsFinished(id);
     }
 
 }

@@ -51,7 +51,6 @@ public class DTOMapper {
         orderDetailDTO.setOrder_id(orderDetail.getOrderId());
         orderDetailDTO.setProduct_id(orderDetail.getProductId());
         orderDetailDTO.setQuantity(orderDetail.getQuantity());
-        orderDetailDTO.setCost(orderDetail.getCost());
         orderDetailDTO.setImage(Base64.getEncoder().encodeToString(orderDetail.getProducts().getImage()));
         return orderDetailDTO;
     }
@@ -94,5 +93,13 @@ public class DTOMapper {
         review.setCustomerId(reviewDTO.getCustomer_id());
         review.setProductId(reviewDTO.getProduct_id());
         return review;
+    }
+
+    public Order_details toOrderDetailEntity(OrderDetailDTO orderDetailDTO) {
+        Order_details orderDetail = new Order_details();
+        orderDetail.setOrderId(orderDetailDTO.getOrder_id());
+        orderDetail.setProductId(orderDetailDTO.getProduct_id());
+        orderDetail.setQuantity(orderDetailDTO.getQuantity());
+        return orderDetail;
     }
 }
