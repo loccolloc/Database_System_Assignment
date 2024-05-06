@@ -21,8 +21,8 @@ public class Orders {
     private int total_cost;
     @Column(name = "total_quantity")
     private int total_quantity;
-    @Column(name = "state", length = 6)
-    private String state = "process";
+    @Column(name = "state", length = 12)
+    private String state;
     @Column(name = "type", length = 7, nullable = false)
     private String type;
     @ManyToOne
