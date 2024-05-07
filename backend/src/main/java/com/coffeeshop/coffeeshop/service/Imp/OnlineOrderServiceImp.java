@@ -81,10 +81,6 @@ public class OnlineOrderServiceImp implements OnlineOrderService {
 
     @Override
     public int addProduct(OrderDetailDTO orderDetailDTO) {
-        Online_orders onlineOrder = onlineOrderRepository.findById(orderDetailDTO.getOrder_id()).orElse(null);
-        if (onlineOrder == null || onlineOrder.getOrders().getState().equals("finished    ")) {
-            return -1;
-        }
         Order_details orderDetail = mapper.toOrderDetailEntity(orderDetailDTO);
         if (orderDetailRepository.existsById(
                 new IdOrder_details(orderDetailDTO.getOrder_id(), orderDetailDTO.getProduct_id()))) {
