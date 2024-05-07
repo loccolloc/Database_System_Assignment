@@ -193,7 +193,7 @@ PUT http://localhost:8080/order/addProduct
 Content-Type: application/json
 
 {
-  "order_id": 3,
+  "order_id": 5,
   "product_id": 6,
   "quantity": 1
 }
@@ -203,8 +203,8 @@ PUT http://localhost:8080/order/removeProduct
 Content-Type: application/json
 
 {
-  "order_id": 3,
-  "product_id": 4
+  "order_id": 5,
+  "product_id": 6
 }
 
 ###
