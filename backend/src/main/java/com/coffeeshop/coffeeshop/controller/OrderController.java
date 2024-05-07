@@ -30,6 +30,11 @@ public class OrderController {
         return onlineOrderService.getOrderByUserId(id);
     }
 
+    @GetMapping("/getLatestByUserId/{id}")
+    public OnlineOrderDTO getLatestOnlineOrderByUserId(@PathVariable int id) {
+        return onlineOrderService.getLatestOrderByUserId(id);
+    }
+
     @PostMapping("/post")
     public int postOnlineOrder(@RequestBody OnlineOrderDTO onlineOrderDTO) {
         return onlineOrderService.postOrder(onlineOrderDTO);

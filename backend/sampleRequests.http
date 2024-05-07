@@ -219,3 +219,20 @@ Content-Type: application/json
 
 ###
 PUT http://localhost:8080/order/setAsFinished/3
+
+###
+GET http://localhost:8080/order/getLatestByUserId/6
+
+###
+POST http://localhost:8080/order/post
+Content-Type: application/json
+
+{
+  "employee_id": 5,
+  "account_id": 3,
+  "delivery_address": "hcmut",
+  "delivery_charges": 0
+}
+
+###
+DELETE http://localhost:8080/order/delete/7

@@ -50,8 +50,24 @@ public class OnlineOrderServiceImp implements OnlineOrderService {
     }
 
     @Override
+    public OnlineOrderDTO getLatestOrderByUserId(int id) {
+        List<Online_orders> onlineOrders = onlineOrderRepository
+                .findAllByAccountIdAndState(id, "in progress ");
+        if (onlineOrders.size() == 1) {
+            return mapper.toOnlineOrderDTO(onlineOrders.getFirst());
+        } else return null;
+    }
+
+    @Override
     public int postOrder(OnlineOrderDTO onlineOrderDTO) {
-        return 0;
+        try {
+            Online_orders onlineOrder = mapper.toOnlineOrderEntity(onlineOrderDTO);
+            onlineOrderRepository.save(onlineOrder);
+            return 0;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return -1;
+        }
     }
 
     @Override

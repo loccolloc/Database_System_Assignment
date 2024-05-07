@@ -16,7 +16,7 @@ public class OnlineOrderDTO {
     private Date end_time;
     private int total_cost;
     private int total_quantity;
-    private String state = "process";
+    private String state;
     private String type;
     private int employee_id;
     private int account_id;
