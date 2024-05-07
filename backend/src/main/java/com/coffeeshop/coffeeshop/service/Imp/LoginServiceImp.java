@@ -44,7 +44,7 @@ public class LoginServiceImp implements LoginService {
         accountsDTO.setUsername(accounts.getUsername());
         accountsDTO.setPassword(accounts.getPassword());
         accountsDTO.setDisplay_name(accounts.getDisplay_name());
-        accountsDTO.setPoint(accountsDTO.getPoint());
+        accountsDTO.setPoint(accounts.getPoint());
         accountsDTO.setRole(accounts.getRole());
         return accountsDTO;
     }

@@ -9,5 +9,5 @@ public class AccountsDTO {
     private String password;
     private String display_name;
     private String role;
-    private String point;
+    private int point;
 }

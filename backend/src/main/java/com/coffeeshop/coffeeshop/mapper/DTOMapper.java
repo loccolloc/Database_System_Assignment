@@ -51,6 +51,8 @@ public class DTOMapper {
         orderDetailDTO.setOrder_id(orderDetail.getOrderId());
         orderDetailDTO.setProduct_id(orderDetail.getProductId());
         orderDetailDTO.setQuantity(orderDetail.getQuantity());
+        orderDetailDTO.setCost(orderDetail.getCost());
+        orderDetailDTO.setProduct_name(orderDetail.getProducts().getName());
         orderDetailDTO.setImage(Base64.getEncoder().encodeToString(orderDetail.getProducts().getImage()));
         return orderDetailDTO;
     }
