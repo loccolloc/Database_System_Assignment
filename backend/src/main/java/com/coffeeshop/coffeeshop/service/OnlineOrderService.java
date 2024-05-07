@@ -23,5 +23,7 @@ public interface OnlineOrderService {
     int updateProduct(OrderDetailDTO orderDetailDTO);
 
     int setAsFinished(int id);
+
+    OnlineOrderDTO getLatestOrderByUserId(int id);
 }
 

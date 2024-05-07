@@ -5,12 +5,15 @@ import com.coffeeshop.coffeeshop.dto.OrderDetailDTO;
 import com.coffeeshop.coffeeshop.dto.ProductDTO;
 import com.coffeeshop.coffeeshop.dto.ReviewDTO;
 import com.coffeeshop.coffeeshop.entity.*;
+import com.coffeeshop.coffeeshop.repository.AccountsRepository;
+import com.coffeeshop.coffeeshop.repository.EmployeesRepository;
 import com.coffeeshop.coffeeshop.repository.OrderDetailRepository;
 import com.coffeeshop.coffeeshop.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -21,6 +24,10 @@ public class DTOMapper {
     OrderRepository orderRepository;
     @Autowired
     OrderDetailRepository orderDetailRepository;
+    @Autowired
+    AccountsRepository accountsRepository;
+    @Autowired
+    EmployeesRepository employeesRepository;
 
     public Products toProductEntity(ProductDTO productDTO) {
         Products product = new Products();
@@ -79,6 +86,7 @@ public class DTOMapper {
         return onlineOrderDTO;
     }
 
+
     public ReviewDTO toReviewDTO(Reviews review) {
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setComment(review.getComment());
@@ -103,5 +111,19 @@ public class DTOMapper {
         orderDetail.setProductId(orderDetailDTO.getProduct_id());
         orderDetail.setQuantity(orderDetailDTO.getQuantity());
         return orderDetail;
+    }
+
+    public Online_orders toOnlineOrderEntity(OnlineOrderDTO onlineOrderDTO) {
+        Online_orders onlineOrder = new Online_orders();
+        onlineOrder.setDelivery_charges(onlineOrderDTO.getDelivery_charges());
+        onlineOrder.setDelivery_address(onlineOrderDTO.getDelivery_address());
+        onlineOrder.setAccount(accountsRepository.findById(onlineOrderDTO.getAccount_id()).orElseThrow());
+        Orders order = new Orders();
+        order.setType("online");
+        order.setStart_time(new Date(System.currentTimeMillis()));
+        order.setEmployee(employeesRepository.findById(onlineOrderDTO.getEmployee_id()).orElseThrow());
+        order.setState("in progress");
+        onlineOrder.setOrders(order);
+        return onlineOrder;
     }
 }
