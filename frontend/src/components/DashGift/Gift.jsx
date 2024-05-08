@@ -59,7 +59,7 @@ const Gift = () => {
     
     setPoint(res.data.data[0].point);
   });
-  const query = searchQuery.trim() ? `/gifts/getByName?name=${encodeURIComponent(searchQuery)}` : '/gifts/all';
+  const query = searchQuery.trim() ? `/gifts/getByName?name=${encodeURIComponent(searchQuery.trim())}` : '/gifts/all';
 
   axios.get(query)
   .then(response => setGiftData(response.data))

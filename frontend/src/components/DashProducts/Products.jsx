@@ -39,7 +39,7 @@ const Products = () => {
   };
   useEffect(() => {
     const axios = createApiClient();
-    const query = searchQuery.trim() ? `/products/getByName?name=${encodeURIComponent(searchQuery)}` : '/products/all';
+    const query = searchQuery.trim() ? `/products/getByName?name=${encodeURIComponent(searchQuery.trim())}` : '/products/all';
     axios.get(query)
       .then(response => setProductData(response.data))
       .catch(error => console.error('Failed to fetch products:', error));
