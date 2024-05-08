@@ -5,7 +5,8 @@ import { BiShoppingBag } from "react-icons/bi";
 import ReactImageGallery from "react-image-gallery";
 import Rater from "react-rater";
 import axios from 'axios';  // Import axios here
-
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import "react-rater/lib/react-rater.css";
 import "./App.css"
 import {
@@ -25,23 +26,38 @@ import Rating from '@mui/material/Rating';
 const ProductDetail = () => {
   const idUser= window.localStorage.getItem('id');
   const [comments, setComments] = useState([]);
-
+  const [orderDetails, setOrderDetails] = useState([]);
+  const [order, setOrder] = useState({});
   const { id } = useParams();
   const [productDetailItem, setProductDetailItem] = useState(null);
   const [comment, setComment] = useState([]);
-  const [score, setScore] = useState(0); // Assuming you have a way to set this, like a rating component
-
+  const [score, setScore] = useState(0); 
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingCommentText, setEditingCommentText] = useState('');
+  const [editingScore, setEditingScore] = useState(0);
   const role= window.localStorage.getItem('role');
   const fetchComments = async () => {
     try {
       const response = await fetch(`http://localhost:8080/review/getByProductId/${id}`);
       const data = await response.json();
-      setComment(data);
-      console.log("Dữ liệu bình luận mới:", data);
+      const commentsWithIds = data.map((comment, index) => ({
+        ...comment,
+        id: index ,
+      }));
+      setComment(commentsWithIds);
     } catch (error) {
       console.error('Lỗi khi lấy bình luận:', error);
     }
   };
+  useEffect(() => {
+    fetch(`http://localhost:8080/order/getLatestByUserId/${idUser}`)
+        .then(response => response.json())
+        .then((data) => {setOrderDetails(data.order_details);
+            setOrder(data);
+            console.log("gio hang:",data);
+        })
+        .catch(error => console.error('Error fetching order details:', error));
+}, []);
   useEffect(() => {
     const fetchProductDetail = async () => {
       const response = await fetch(`http://localhost:8080/products/get/${id}`);
@@ -55,6 +71,67 @@ const ProductDetail = () => {
     fetchComments();
     fetchProductDetail();
   }, [id]);
+  const handleAddToCart = async () => {
+    const existingProduct = orderDetails.find(detail => detail.product_id === parseInt(id));
+
+    const quantity = existingProduct ? existingProduct.quantity + 1 : 1;
+
+    const payload = {
+        order_id: order.id, 
+        product_id: parseInt(id),
+        quantity: quantity
+    };
+if(existingProduct)
+  {
+    try {
+      const response = await axios.put('http://localhost:8080/order/updateProduct', payload);
+      toast.success("Product added to cart successfully!");
+      console.log('Product added to cart successfully:', response.data);
+      if (existingProduct) {
+          const updatedOrderDetails = orderDetails.map(detail =>
+              detail.product_id === parseInt(id) ? { ...detail, quantity: quantity } : detail
+          );
+          setOrderDetails(updatedOrderDetails);
+      } else {
+          setOrderDetails([...orderDetails, {
+              order_id: order.order_id,
+              product_id: parseInt(id),
+              quantity: quantity,
+              image: productDetailItem.image 
+          }]);
+      }
+  } catch (error) {
+      console.error('Failed to add product to cart:', error);
+      toast.error("Failed to add product to cart!");
+  }
+
+  }else{
+    try {
+      const response = await axios.put('http://localhost:8080/order/addProduct', payload);
+      toast.success("Product added to cart successfully!");
+      console.log('Product added to cart successfully:', response.data);
+      if (existingProduct) {
+          const updatedOrderDetails = orderDetails.map(detail =>
+              detail.product_id === parseInt(id) ? { ...detail, quantity: quantity } : detail
+          );
+          setOrderDetails(updatedOrderDetails);
+      } else {
+          setOrderDetails([...orderDetails, {
+              order_id: order.order_id,
+              product_id: parseInt(id),
+              quantity: quantity,
+              image: productDetailItem.image  
+          }]);
+      }
+  } catch (error) {
+      console.error('Failed to add product to cart:', error);
+      toast.error("Failed to add product to cart!");
+  }
+
+  }
+  
+};
+
   function handleDelete(userId, productId) {
     axios.delete(`http://localhost:8080/review/delete?user_id=${userId}&product_id=${productId}`)
     .then(response => {
@@ -81,8 +158,8 @@ const ProductDetail = () => {
           'Content-Type': 'application/json'
         }
       });
-      setComments([...comments, response.data]);  // Optionally update UI without refresh
-      setComments('');  // Clear the comment box
+      setComments([...comments, response.data]);  
+      setComments('');  
       console.log('thành công:', response.data);
       await fetchComments();
     } catch (error) {
@@ -93,40 +170,78 @@ const ProductDetail = () => {
 
   const renderComment = () => {
     return comment.map((comment, index) => {
-     
-        return (
-            <div key={index} className="border rounded-md p-4 ml-3 my-3">
-                <div className="flex gap-3 justify-between">
-                    <div className="flex items-center gap-1">
-                        <img
-                            src="https://louisville.edu/enrollmentmanagement/images/person-icon/image" 
-                            className="object-cover w-8 h-8 rounded-full 
-                            border-2 border-emerald-400  shadow-emerald-400
-                            "
-                            alt="1"
-                        />
-
-                        <h3 className="font-bold">{comment.username}</h3>
-                        <Rating name="read-only" value={comment.score} readOnly />
-
-                    </div>
-                    {/* <Rating value={5} precision={1} readOnly /> */}
-
-                </div>
-                <div className="text-gray-700 text-sm mb-4 mt-2">Đăng vào {comment.time}</div>
-                <p className="text-gray-600 mt-2">{comment.comment}</p>
-                {(comment.customer_id == idUser || role === "admin") && (
+      const isEditing = editingCommentId === comment.id; 
+  
+      return (
+        <div key={index} className="border rounded-md p-4 ml-3 my-3">
+         
+          {isEditing ? (
+            <form onSubmit={(e) => handleSaveEdit(e)}>
+              <input
+                type="text"
+                value={editingCommentText}
+                onChange={(e) => setEditingCommentText(e.target.value)}
+              />
+              <Rating
+                name="simple-controlled"
+                value={editingScore}
+                onChange={(event, newValue) => setEditingScore(newValue)}
+              />
+              <button type="submit">Lưu</button>
+              <button onClick={() => setEditingCommentId(null)}>Hủy</button>
+            </form>
+          ) : (
+            <div>
+            
+              <h3 className="font-bold">{comment.username}</h3>
+              <Rating name="read-only" value={comment.score} readOnly />
+              <p className="text-gray-600 mt-2">{comment.comment}</p>
+              {(comment.customer_id == idUser || role === "admin") && (
                     <button
                     onClick={() => handleDelete(comment.customer_id, comment.product_id)} // Use dynamic values as needed
 
-                        className="text-gray-500 hover:text-gray-700">
+                        className="mt-5 text-gray-500 hover:text-gray-700">
                         <i class="fa fa-trash-alt"></i> Xóa
                     </button>
                 )}
+                {(comment.customer_id == idUser || role === "admin") && (
+              <button onClick={() => startEdit(comment)}>Chỉnh sửa</button>
+            )}
             </div>
-        );
+          )}
+        </div>
+      );
     });
-};
+  };
+  const startEdit = (comment) => {
+    setEditingCommentId(comment.id);
+    setEditingCommentText(comment.comment);
+    setEditingScore(comment.score);
+  };
+  
+  const handleSaveEdit = async (event) => {
+    event.preventDefault();
+    try {
+      console.log("hello");
+      const response = await axios.put('http://localhost:8080/review/put', {
+  comment: editingCommentText,
+  score: editingScore,
+  customer_id: idUser,
+  product_id: id
+}, {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
+      console.log('Cập nhật thành côngggggggggggg:', response.data);
+      setEditingCommentId(null);
+      fetchComments();
+    } catch (error) {
+      console.error('Cập nhật thất bạiiiiiiiiiii:', error);
+    }
+  };
+  
 
   if (!productDetailItem) {
     return <div>Loading...</div>;
@@ -134,8 +249,10 @@ const ProductDetail = () => {
 
   return (
     <section className="container flex-grow mx-auto max-w-[1200px] border-b py-5 lg:grid lg:grid-cols-2 lg:py-10">
-    
+      
+
       <div className="container mx-auto px-4">
+      <ToastContainer />
         <ReactImageGallery
           showBullets={false}
           showFullscreenButton={false}
@@ -176,7 +293,8 @@ const ProductDetail = () => {
           <span className="font-normal">{productDetailItem.type}</span>
         </p>
         <p className="mt-4 text-4xl font-bold text-violet-900">
-          ${productDetailItem.listPrice}{" "}
+          {productDetailItem.listPrice.toLocaleString('vi-VN')}{"  đồng"}
+
         </p>
         <p className="mt-5 font-bold">
         
@@ -188,8 +306,8 @@ const ProductDetail = () => {
         </p>
         <div className="mt-7 flex flex-row items-center gap-6">
         {role !== "admin" && (
-        <button className="flex h-12 w-full items-center justify-center bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 duration-150 ease-in-out">
-  <BiShoppingBag className="mr-2" />
+            <button className="flex h-12 w-full items-center justify-center bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 duration-150 ease-in-out" onClick={handleAddToCart}>
+            <BiShoppingBag className="mr-2" />
   Add to Cart
 </button>
 

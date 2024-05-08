@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import {
     MDBBtn,
     MDBCard,
@@ -14,32 +14,108 @@ import {
 } from "mdb-react-ui-kit";
 import styles from "./style.module.css";
 import React, { useEffect, useState } from 'react';
-
+import axios from 'axios';  
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 export default function QuantityEdit() {
     const [orderDetails, setOrderDetails] = useState([]);
     const [order, setOrder] = useState({});
     const id= window.localStorage.getItem('id');
-
-    const navigate = useNavigate(); // Sử dụng hook useNavigate
+    console.log("id: ", id);
+    const navigate = useNavigate(); 
+    
+      console.log(orderDetails);
+    
     const handleInvoiceClick = () => {
-        navigate('/invoice'); // Điều hướng sang trang Login
+        navigate('/invoice'); 
       };
       const handleBackClick = () => {
-        navigate('/listproducts'); // Điều hướng sang trang Login
+        navigate('/listproducts'); 
       };
       useEffect(() => {
-        fetch(`http://localhost:8080/order/getByUserId/${id}`)
+        fetch(`http://localhost:8080/order/getLatestByUserId/${id}`)
             .then(response => response.json())
-            .then((data) => {setOrderDetails(data[0].order_details);
-                setOrder(data[0]);
-                console.log("gio hang:",data[0]);
+            .then(data => {
+                setOrderDetails(data.order_details);
+                setOrder(data);
             })
-            .catch(error => console.error('Error fetching order details:', error));
-    }, []);
+            .catch(error => {
+                console.error('Error fetching order details:', error);
+                toast.error('Failed to fetch order details');
+            });
+    }, [id]);
+    const deleteProduct = (product_id) => {
+        axios.put('http://localhost:8080/order/removeProduct', {
+            order_id: order.id,
+            product_id: product_id,
+        })
+        .then(response => {
+           
+            setOrderDetails(currentDetails => 
+                currentDetails.filter(item => item.product_id !== product_id)
+            );
+            setOrder(prevOrder => ({
+                ...prevOrder,
+                total_cost: prevOrder.total_cost - response.data.costReduction,
+             
+            }));
+    
+            toast.success("Product deleted successfully!");
+        })
+        .catch(error => {
+            console.error('Error deleting product:', error);
+            toast.error('Error deleting product');
+        });
+    };
+
+    const updateProductQuantity = (newQuantity, productId,newCost) => {
+        axios.put('http://localhost:8080/order/updateProduct', {
+            order_id: order.id,
+            product_id: productId,
+            quantity: newQuantity,
+        })
+        .then(response => {
+            setOrderDetails(currentDetails =>
+                currentDetails.map(item =>
+                    item.product_id === productId ? { ...item, quantity: newQuantity,cost:newCost } : item
+                )
+            );
+            toast.success("Quantity updated successfully!");
+        })
+        .catch(error => {
+            console.error('Error updating product quantity:', error);
+            toast.error('Error updating product quantity');
+        });
+    };
+
+    const handleDecrement = (quantity, productId,unitPrice,cost) => {
+        if (quantity > 0) {
+            const newQuantity = quantity - 1;
+            const newCost=cost-unitPrice;
+            updateProductQuantity(newQuantity, productId,newCost);
+            setOrder(prevOrder => ({
+                ...prevOrder,
+                total_cost: prevOrder.total_cost - unitPrice,
+              
+            }));
+        }
+    };
+
+    const handleIncrement = (quantity, productId,unitPrice,cost) => {
+        const newQuantity = quantity + 1;
+        const newCost=cost+unitPrice;
+        updateProductQuantity(newQuantity, productId,newCost);
+        setOrder(prevOrder => ({
+            ...prevOrder,
+            total_cost: prevOrder.total_cost + unitPrice,
+           
+        }));
+    };
 
     return (
         <section className={styles.hCustom} style={{ backgroundColor: "#eee" }}>
             <MDBContainer className="py-5 h-100">
+            <ToastContainer />
                 <MDBRow className="justify-content-center align-items-center h-100">
                     <MDBCol size="12">
                         <MDBCard className={styles.cardRegistration}>
@@ -66,18 +142,23 @@ export default function QuantityEdit() {
                                                         <MDBCardImage
                                                         src={`data:image/png;base64,${item.image}`}
                                                             
-                                                            fluid className="rounded-3" alt={item.name} />
+                                                            fluid className="rounded-3" alt={item.product_name} />
                                                     </MDBCol>
                                                     <MDBCol md="3" lg="3" xl="3">
                                                         <MDBTypography tag="h6" className="text-muted font-bold">
                                                             {item.category}
                                                         </MDBTypography>
                                                         <MDBTypography tag="h6" className="text-black mb-0 font-bold">
-                                                            {item.name}
+                                                            {item.product_name}
                                                         </MDBTypography>
                                                     </MDBCol>
+
                                                     <MDBCol md="3" lg="3" xl="3" className="d-flex align-items-center">
-                                                        <MDBInput type="number" min="0" defaultValue={item.quantity} size="sm" />
+                                                    <MDBBtn color="light" onClick={() => handleDecrement(item.quantity, item.product_id,item.cost/item.quantity,item.cost)} disabled={item.quantity <= 0}>-</MDBBtn>
+
+                                                        <MDBInput type="number" min="0" value={item.quantity} size="sm" />
+                                                        <MDBBtn  onClick={()=>{handleIncrement(item.quantity,item.product_id,item.cost/item.quantity,item.cost)}} color="light" >+</MDBBtn>
+
                                                     </MDBCol>
                                                     <MDBCol md="3" lg="2" xl="2" className="text-end">
                                                         <MDBTypography tag="h6" className="font-bold mb-0">
@@ -85,7 +166,7 @@ export default function QuantityEdit() {
                                                              
                                                         </MDBTypography>
                                                     </MDBCol>
-                                                    <MDBCol md="1" lg="1" xl="1" className="text-end">
+                                                    <MDBCol onClick={()=>{deleteProduct(item.product_id)}} md="1" lg="1" xl="1" className="text-end">
                                                         <a href="#!" className="text-muted">
                                                             <MDBIcon fas icon="times" />
                                                         </a>
@@ -112,7 +193,7 @@ export default function QuantityEdit() {
                                             {orderDetails.map((item, index) => (
     <div key={index} className="d-flex justify-content-between mb-4 font-bold">
         <MDBTypography tag="h5" className={styles.items}>
-             item{item.product_id}
+        {item.product_name}
         </MDBTypography>
         <MDBTypography tag="h5"> {item.cost ? item.cost.toLocaleString('vi-VN') : '0'} đồng </MDBTypography>
     </div>
@@ -140,9 +221,12 @@ export default function QuantityEdit() {
                                                 <MDBTypography tag="h5" className="text-uppercase font-bold">
                                                     Total price
                                                 </MDBTypography>
-                                                <MDBTypography  className="text-uppercase font-bold" tag="h5">
-                                                {(order.total_cost+order.delivery_charges).toLocaleString('vi-VN')} đồng
-                                                     </MDBTypography>
+                                                <MDBTypography className="text-uppercase font-bold" tag="h5">
+    {order.total_cost === 0 ||isNaN(order.total_cost)
+        ? "0 đồng"
+        : (order.total_cost + order.delivery_charges).toLocaleString('vi-VN') + " đồng"}
+</MDBTypography>
+
                                             </div>
         
                                             <button  onClick={handleInvoiceClick} className="btn btn-dark btn-lg btn-block text-white" >
