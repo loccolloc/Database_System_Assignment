@@ -15,4 +15,6 @@ public interface LoginService {
     int deleteAccount(String username, String password);
     List<Gifts> availableGift(String username);
     int exchangeGifts(int account_id, int gift_id, int quantity);
+
+    int changeInfo(int id, String name, String displayName);
 }

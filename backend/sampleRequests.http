@@ -212,9 +212,9 @@ PUT http://localhost:8080/order/updateProduct
 Content-Type: application/json
 
 {
-  "order_id": 3,
-  "product_id": 4,
-  "quantity": 3
+  "order_id": 5,
+  "product_id": 6,
+  "quantity": 2
 }
 
 ###
@@ -236,3 +236,9 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/order/delete/7
+
+###
+PUT http://localhost:8080/login/changeInfo?
+    id=3&
+    name=kng&
+    displayName=kng
