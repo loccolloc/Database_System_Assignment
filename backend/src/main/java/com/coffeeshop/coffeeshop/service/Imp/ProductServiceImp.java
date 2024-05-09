@@ -27,7 +27,6 @@ public class ProductServiceImp implements ProductService {
     }
 
 
-
     @Override
     public Products getProductById(int id) {
         if (productRepository.findById(id).isPresent()) {
@@ -68,12 +67,14 @@ public class ProductServiceImp implements ProductService {
     @Transactional
     public int putProduct(ProductDTO productDTO) {
         List<Products> products = productRepository.findAllByName(productDTO.getName());
-        if(products.size() == 1){
+        if (products.size() == 1) {
             Products product = products.getFirst();
             product.setType(productDTO.getType());
             product.setListPrice(productDTO.getList_price());
             product.setDiscount(BigDecimal.valueOf(productDTO.getDiscount()));
             product.setState(productDTO.getState());
+            if (productDTO.getImage() != null)
+                product.setImage(Base64.getDecoder().decode(productDTO.getImage()));
             return 0;
         } else return -1;
     }
@@ -82,7 +83,7 @@ public class ProductServiceImp implements ProductService {
     @Transactional
     public int putImage(String name, String image) {
         List<Products> products = productRepository.findAllByName(name);
-        if(products.size() == 1){
+        if (products.size() == 1) {
             Products product = products.getFirst();
             product.setImage(Base64.getDecoder().decode(image));
             return 0;
