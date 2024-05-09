@@ -11,7 +11,10 @@ export default function ListProducts() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState('');
 
+
   const axios = createApiClient();
+   
+
 
   const fetchProductsByType = (type = '', order = '') => {
     let query = type ? `/products/getByType?type=${encodeURIComponent(type)}` : '/products/all';
@@ -29,6 +32,7 @@ export default function ListProducts() {
   };
 
   useEffect(() => {
+    
     fetchProductsByType();
   }, []);
 

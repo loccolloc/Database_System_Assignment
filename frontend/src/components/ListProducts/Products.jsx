@@ -21,7 +21,7 @@ function Products(props) {
         <div className='productCard__content'>
           <h3 className='productName'>{props.name}</h3>
           <div className='displayStack__1'>
-            <div className='productPrice'>${props.list_price}</div>
+            <div className='productPrice'>{props.list_price.toLocaleString('vi-VN')} đồng</div>
             <div className='productDiscount'>{props.discount}% off</div>
           </div>
           <div className='displayStack__2'>

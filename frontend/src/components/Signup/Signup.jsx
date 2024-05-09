@@ -37,7 +37,7 @@ export default function Signup() {
             console.log(response.data);
 
             if (response.data.data===0) {
-                // navigate('/login'); 
+                navigate('/login'); 
             }
         } catch (err) {
             if (!err.response) {

@@ -4,7 +4,8 @@ import Hcmut from "../../assets/website/hcmutlog.png";
 import { useNavigate } from 'react-router-dom'; 
 import { FaPowerOff } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
-
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
 const Menu = [
   {
     id: 1,
@@ -15,13 +16,55 @@ const Menu = [
  
 ];
 const Navbar = () => {
+  const [order, setOrder] = useState({});
   const role = window.localStorage.getItem('role');
+  const id= window.localStorage.getItem('id');
+
   const navigate = useNavigate(); 
   const handleOrderClick = () => {
     navigate('/login'); 
   };
+  function postNewOrder() {
+    const employeeId = Math.floor(Math.random() * 16); 
+    const postData = {
+        employee_id: employeeId,
+        account_id: id, 
+        delivery_address: "hcmut",
+        delivery_charges: 20000
+    };
+
+    axios.post('http://localhost:8080/order/post', postData)
+        .then(response => {
+            console.log("Order posted successfully: ", response.data);
+            navigate('/cart'); 
+        })
+        .catch(error => {
+            console.error("Failed to post order:", error);
+        });
+}
   const handleCartClick = () => {
-    navigate('/cart'); 
+
+    fetch(`http://localhost:8080/order/getLatestByUserId/${id}`)
+        
+    .then(data => {
+        
+        if (data.headers.get('content-length') === '0') {
+         console.log("chua co dia chi")
+          
+                   postNewOrder();
+                 
+                  
+        }else{
+          console.log("du lieu khoong rong");
+          navigate('/cart'); 
+        }
+    })
+    .catch(error => {
+        console.log("dia chi khong co", error);
+        // postNewOrder();
+       
+    });
+  
   };
   const handleProductClick = () => {
     navigate('/listproducts'); 
