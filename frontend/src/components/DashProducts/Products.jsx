@@ -15,9 +15,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 import 'react-toastify/dist/ReactToastify.css';
 import { TextFields } from '@mui/icons-material';
-const ImageCell = ({ cell }) => (
-  <img src={`data:image/png;base64,${cell.getValue()}`} alt="Product" style={{ width: '100px', height: 'auto' }} />
-);
+const ImageCell = ({ cell }) => {
+  const imageSrc = cell.getValue();
+  if (!imageSrc) {
+    return <span>No image</span>; // Or render a placeholder image
+  }
+  return (
+    <img src={`data:image/png;base64,${imageSrc}`} alt="Product" style={{ width: '100px', height: 'auto' }} />
+  );
+};
 
 ImageCell.propTypes = {
   cell: PropTypes.shape({
@@ -66,6 +72,7 @@ const Products = () => {
         const products = response.data;
         const productsWithClassification = await Promise.all(products.map(async (product) => {
           const classifyResponse = await axios.get(`/products/classify/${product.id}`);
+
           return { ...product, classify: classifyResponse.data };
         }));
         setProductData(productsWithClassification);
@@ -77,16 +84,52 @@ const Products = () => {
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageFile(reader.result.split(',')[1]); // Save base64 string of the image
+      };
+      reader.readAsDataURL(file);
     }
   };
+  const createProduct = (newProduct) => {
+    const axios = createApiClient();
+    const formData = {
+      name: newProduct.name,
+      type: newProduct.type,
+      list_price: newProduct.listPrice,
+      discount: newProduct.discount || 0.0, // Set a default value if discount is not provided
+      state: newProduct.state || "available", // Set a default state if not provided
+      image: imageFile // Use the base64 encoded string
+    };
+
+    axios.post(`http://localhost:8080/products/post`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(response => {
+      toast.success("Product created successfully!");
+      setProductData(current => [...current, response.data]); // Append the new product to the current product data
+      setImageFile(null); // Clear the image file state
+    })
+    .catch(error => {
+      toast.error(`Failed to create product: ${error.message}`);
+      console.error('Failed to create product:', error);
+    });
+  };
+
 
   const handleEditImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setEditImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditImageFile(reader.result.split(',')[1]); // Ensure you split by ',' and take the second part to avoid 'data:image/*;base64,' prefix
+      };
+      reader.readAsDataURL(file);
     }
   };
+
 
   const columns = useMemo(() => [
     { accessorKey: 'id', header: 'Id', enableEditing: false, size: 80 },
@@ -108,44 +151,40 @@ const Products = () => {
       setImageFile(null);
       setValidationErrors({});
     },
-    onCreatingRowSave: ({ values }) => {
-      const formData = new FormData();
-      formData.append('name', values.name);
-      formData.append('type', values.type);
-      formData.append('listPrice', values.listPrice);
-      if (imageFile) {
-        formData.append('image', imageFile);
-      }
+    onEditingRowSave: ({ values }) => {
+     
+      console.log("values:", values);
+      const formData = {
+        name: values.name,
+        type: values.type,
+        list_price: values.listPrice,
+        discount: "0.0",  // Assuming a static discount for demonstration
+        state: "unavailable",  // Assuming a static state for demonstration
+        image: editImageFile, // include the base64 image
+      };
+    
       const axios = createApiClient();
-      axios.post('/products/create', formData, {
+      axios.put(`http://localhost:8080/products/put`, formData, {  // Adjusted endpoint to match the provided API example
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         }
       })
-      .then(response => console.log('Product created:', response.data))
-      .catch(error => console.error('Failed to create product:', error));
+      .then((response) =>{ 
+        toast.success("Product updated!");
+        console.log('Product updated:', response.data);})
+      .catch((error) =>{ 
+        toast.error("Failed to update product!");
+
+        console.error('Failed to update product:', error);});
     },
     onEditingRowCancel: () => {
       setEditImageFile(null);
       setValidationErrors({});
     },
-    onEditingRowSave: ({ values, row }) => {
-      const formData = new FormData();
-      formData.append('name', values.name);
-      formData.append('type', values.type);
-      formData.append('listPrice', values.listPrice);
-      if (editImageFile) {
-        formData.append('image', editImageFile);
-      }
-      const axios = createApiClient();
-      axios.put(`/products/update/${row.original.id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }
-      })
-      .then(response => console.log('Product updated:', response.data))
-      .catch(error => console.error('Failed to update product:', error));
+    onCreatingRowSave: ({ values }) => {
+      createProduct(values);
     },
+
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
         <DialogTitle variant="h3">Create New Product</DialogTitle>
