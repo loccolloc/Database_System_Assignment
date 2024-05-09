@@ -64,4 +64,14 @@ public class ProductsController {
     public List<Products> getAllProductsByPriceDesc(){
         return productService.getAllProductsByPriceDesc();
     }
+
+    @GetMapping("/classify/{id}")
+    public String classifyProducts(@PathVariable int id){
+        return productService.classifyProducts(id);
+    }
+
+    @GetMapping("/calculateTotalProfitByDate")
+    public int calculateTotalProfitByDate(@RequestParam String start_date, @RequestParam String end_date){
+        return productService.calculateTotalProfitByDate(start_date, end_date);
+    }
 }
