@@ -56,6 +56,13 @@ public class LoginController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
+    @PutMapping("/changeInfo")
+    public ResponseEntity<?>  changeInfo(@RequestParam int id, @RequestParam String name, @RequestParam String displayName){
+        ResponseData responseData = new ResponseData();
+        responseData.setData(loginService.changeInfo(id, name, displayName));
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteAccount(@RequestParam String username, @RequestParam String password) {
         ResponseData responseData = new ResponseData();

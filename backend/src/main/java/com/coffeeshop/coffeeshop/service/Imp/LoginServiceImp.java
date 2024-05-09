@@ -6,6 +6,7 @@ import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.payload.request.SignUpRequest;
 import com.coffeeshop.coffeeshop.repository.AccountsRepository;
 import com.coffeeshop.coffeeshop.service.LoginService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -94,5 +95,19 @@ public class LoginServiceImp implements LoginService {
     @Override
     public int exchangeGifts(int account_id, int gift_id, int quantity) {
         return accountsRepository.exGifts(account_id, gift_id, quantity);
+    }
+
+    @Override
+    @Transactional
+    public int changeInfo(int id, String name, String displayName) {
+        try {
+            accountsRepository.findById(id).ifPresent(accounts -> {
+                accounts.setUsername(name);
+                accounts.setDisplay_name(displayName);
+            });
+            return 0;
+        } catch (Exception e) {
+            return -1;
+        }
     }
 }
