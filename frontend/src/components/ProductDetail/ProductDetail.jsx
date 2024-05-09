@@ -170,78 +170,77 @@ if(existingProduct)
 
   const renderComment = () => {
     return comment.map((comment, index) => {
-      const isEditing = editingCommentId === comment.id; 
+      const isEditing = editingCommentId === comment.id;
   
       return (
         <div key={index} className="border rounded-md p-4 ml-3 my-3">
-         
           {isEditing ? (
-            <form onSubmit={(e) => handleSaveEdit(e)}>
+            <div>
               <input
                 type="text"
                 value={editingCommentText}
                 onChange={(e) => setEditingCommentText(e.target.value)}
               />
               <Rating
+              className="ml-3"
                 name="simple-controlled"
                 value={editingScore}
                 onChange={(event, newValue) => setEditingScore(newValue)}
               />
-              <button type="submit">Lưu</button>
-              <button onClick={() => setEditingCommentId(null)}>Hủy</button>
-            </form>
+              <button className="ml-5" onClick={(e) => handleSaveEdit(e)}>Lưu</button>
+              <button className="ml-5" onClick={() => setEditingCommentId(null)}>Hủy</button>
+            </div>
           ) : (
             <div>
-            
               <h3 className="font-bold">{comment.username}</h3>
               <Rating name="read-only" value={comment.score} readOnly />
               <p className="text-gray-600 mt-2">{comment.comment}</p>
               {(comment.customer_id == idUser || role === "admin") && (
-                    <button
-                    onClick={() => handleDelete(comment.customer_id, comment.product_id)} // Use dynamic values as needed
-
-                        className="mt-5 text-gray-500 hover:text-gray-700">
-                        <i class="fa fa-trash-alt"></i> Xóa
-                    </button>
-                )}
-                {(comment.customer_id == idUser || role === "admin") && (
-              <button onClick={() => startEdit(comment)}>Chỉnh sửa</button>
-            )}
+                <div className='mt-5'>
+                  <button onClick={() => handleDelete(comment.customer_id, comment.product_id)}>
+                    Xóa
+                  </button>
+                  <button className='ml-5' onClick={() => startEdit(comment)}>
+                    Chỉnh sửa
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
       );
     });
   };
+  
+  const handleSaveEdit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.put('http://localhost:8080/review/put', {
+        comment: editingCommentText,
+        score: editingScore,
+        customer_id: idUser,
+        product_id: id
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      console.log('Cập nhật thành công:', response.data);
+      setEditingCommentId(null);
+      fetchComments();
+    } catch (error) {
+      console.error('Cập nhật thất bại:', error);
+    }
+  };
+  
   const startEdit = (comment) => {
     setEditingCommentId(comment.id);
     setEditingCommentText(comment.comment);
     setEditingScore(comment.score);
   };
   
-  const handleSaveEdit = async (event) => {
-    event.preventDefault();
-    try {
-      console.log("hello");
-      const response = await axios.put('http://localhost:8080/review/put', {
-  comment: editingCommentText,
-  score: editingScore,
-  customer_id: idUser,
-  product_id: id
-}, {
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
-      console.log('Cập nhật thành côngggggggggggg:', response.data);
-      setEditingCommentId(null);
-      fetchComments();
-    } catch (error) {
-      console.error('Cập nhật thất bạiiiiiiiiiii:', error);
-    }
-  };
-  
+ 
 
   if (!productDetailItem) {
     return <div>Loading...</div>;

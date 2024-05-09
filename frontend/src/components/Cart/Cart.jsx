@@ -41,7 +41,7 @@ export default function QuantityEdit() {
             })
             .catch(error => {
                 console.error('Error fetching order details:', error);
-                toast.error('Failed to fetch order details');
+               
             });
     }, [id]);
     const deleteProduct = (product_id) => {
@@ -89,7 +89,7 @@ export default function QuantityEdit() {
     };
 
     const handleDecrement = (quantity, productId,unitPrice,cost) => {
-        if (quantity > 0) {
+        if (quantity > 1) {
             const newQuantity = quantity - 1;
             const newCost=cost-unitPrice;
             updateProductQuantity(newQuantity, productId,newCost);

@@ -134,7 +134,8 @@ const Profile = () => {
                 name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={onEdit}
+                disabled={!onEdit}  
+                on
               />
             </div>
             <div>
@@ -144,8 +145,7 @@ const Profile = () => {
               
                 name="role"
                 value={role}
-                disabled={onEdit}
-              />
+                disabled={!onEdit}               />
             </div>
           </div>
          
