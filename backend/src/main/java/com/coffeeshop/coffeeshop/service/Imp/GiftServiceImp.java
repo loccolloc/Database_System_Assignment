@@ -64,6 +64,8 @@ public class GiftServiceImp implements GiftService {
             Gifts gift = giftRepository.findAllByName(giftDTO.getName()).getFirst();
             gift.setPoint(giftDTO.getPoint());
             gift.setQuantity(giftDTO.getQuantity());
+            if (giftDTO.getImage()!=null)
+                gift.setImage(Base64.getDecoder().decode(giftDTO.getImage()));
             return 0;
         } else {
             return -1;
