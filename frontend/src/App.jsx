@@ -18,6 +18,8 @@ import Cart from '../src/components/Cart/Cart.jsx';
 import Invoice from "../src/components/Invoice/Invoice.jsx";
 import ProductDetail from "../src/components/ProductDetail/ProductDetail.jsx";
 import Profile from "../src/components/Profile/Profile.jsx";
+import Thanks from "../src/components/Thanks/Thanks.jsx";
+
 import ProtectedRoute from './ProtectedRoute'; 
 
 const App = () => {
@@ -40,6 +42,8 @@ const App = () => {
           <Route path="/products" element={<DashProducts />} />
           <Route path="/dashboard" element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/thanks" element={<Thanks />} />
+
           <Route path="/listproducts" element={<ListProducts />} />
           <Route path="/gift" element={<ProtectedRoute><DashGift /></ProtectedRoute>} />
           <Route path="/cart" element={<ProtectedRoute blockRole="admin"><Cart /></ProtectedRoute>} />

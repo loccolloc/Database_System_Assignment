@@ -21,9 +21,9 @@ export default function Signup() {
     useEffect(() => {
         setErrMsg('');
     }, [displayName, username, password]);
-    const navigate = useNavigate(); // Sử dụng hook useNavigate
+    const navigate = useNavigate(); 
     const handleLoginClick = () => {
-      navigate('/login'); // Điều hướng sang trang Login
+      navigate('/login'); 
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,8 +36,8 @@ export default function Signup() {
 
             console.log(response.data);
 
-            if (response.data && response.data.data === true) {
-                navigate('/login'); // Redirect to login page after successful signup
+            if (response.data.data===0) {
+                // navigate('/login'); 
             }
         } catch (err) {
             if (!err.response) {

@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import createApiClient from "../../api/axios";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from "react-toastify";
+import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
+import CloseIcon from '@mui/icons-material/Close';
+
 import {
   MRT_EditActionButtons,
   MaterialReactTable,
@@ -11,7 +14,7 @@ import {
 } from 'material-react-table';
 import {
   Box,
-  
+  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -33,14 +36,31 @@ ImageCell.propTypes = {
   }).isRequired
 };
 const Gift = () => {
+  const accountId= window.localStorage.getItem('id');
+
   const role= window.localStorage.getItem('role');
   const [validationErrors, setValidationErrors] = useState({});
   const [giftData, setGiftData] = useState([]);
   const [point, setPoint] = useState("");
   const [searchQuery, setSearchQuery] = useState(""); 
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupImage, setPopupImage] = useState("");
 
-  const handleDeleteProduct = (productId) => {
+  const handleClaimGift = (giftId ) => {
+    const quantity=1;
     const axios = createApiClient();
+    axios.get(`http://localhost:8080/login/exGifts?account_id=${accountId}&gift_id=${giftId}&quantity=${quantity}`)
+      .then(response => {
+        setShowPopup(true);
+      })
+      .catch(error => console.error('Error claiming gift:', error));
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+  const handleDeleteProduct = (productId) => {
+
     console.log("id xoa",productId);
     axios.delete(`http://localhost:8080/gifts/delete/${productId}`)
       .then(response => {
@@ -170,9 +190,11 @@ const Gift = () => {
        {role !== "admin" && (
           <>
         <Tooltip title="Claim">
-          <IconButton  color="black" onClick={() => console.log('Delete action', row.original.id)}>
+        {((point >= row.original.point)&& row.original.quantity>0 ) && (
+          <IconButton  color="black" onClick={() => handleClaimGift(row.original.id)}>
           <i style={{ fontSize: '30px', textAlign:'center' }}  className="text-center fa fa-hand-paper"></i>
           </IconButton>
+            )}
         </Tooltip>
         <Tooltip title={(point >= row.original.point)&& row.original.quantity>0 ? "Enough points to claim" : "Not enough points to claim"}>
       <IconButton color={(point >= row.original.point)&& row.original.quantity>0 ? "success" : "error"}>
@@ -211,6 +233,14 @@ const Gift = () => {
           ),
         }}
       />
+      <Dialog open={showPopup} onClose={handleClosePopup}>
+        <DialogTitle>Claimed Gift</DialogTitle>
+        <DialogContent>
+          <IconButton onClick={handleClosePopup} style={{ position: 'absolute', top: '5px', right: '5px' }}>
+            <CloseIcon />
+          </IconButton>
+        </DialogContent>
+      </Dialog>
    <ToastContainer />
    {role !== "admin" && (<div className='mb-10 ml-10 mt-10 font-bold' style={{ fontSize: '20px' }}> Your Point: {point} <i style={{ color: '#F28A00' }} className="fa-solid fa-coins fs-3  "></i></div>)}
    <MaterialReactTable table={table} />;
