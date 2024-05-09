@@ -2,13 +2,19 @@ import React, { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import createApiClient from "../../api/axios";
 import { MRT_EditActionButtons, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip, TextField ,InputAdornment} from '@mui/material';
+import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip,Stack , TextField ,InputAdornment} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from "react-toastify";
 import SearchIcon from '@mui/icons-material/Search';
+import dayjs from 'dayjs';
+
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+
 
 import 'react-toastify/dist/ReactToastify.css';
+import { TextFields } from '@mui/icons-material';
 const ImageCell = ({ cell }) => (
   <img src={`data:image/png;base64,${cell.getValue()}`} alt="Product" style={{ width: '100px', height: 'auto' }} />
 );
@@ -25,7 +31,21 @@ const Products = () => {
   const [editImageFile, setEditImageFile] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
   const [searchQuery, setSearchQuery] = useState(""); 
-
+  const [selectedStartDate, setSelectedStartDate] = useState(dayjs().subtract(1, 'month'));
+  const [totalProfit, setTotalProfit] = useState('');
+  useEffect(() => {
+    const axios = createApiClient();
+    const endDate = dayjs().format('DD-MM-YYYY HH:mm:ss');
+    const startDate = selectedStartDate.format('DD-MM-YYYY HH:mm:ss');
+    axios.get(`http://localhost:8080/products/calculateTotalProfitByDate?start_date=${startDate}&end_date=${endDate}`)
+      .then(response => {
+        setTotalProfit(response.data);
+        toast.success("Total Profit updated!");
+      })
+      .catch(err => {
+        toast.error("Failed to fetch total profit: " + err.message);
+      });
+  }, [selectedStartDate]);
   const handleDeleteProduct = (productId) => {
     const axios = createApiClient();
     console.log("id xoa",productId);
@@ -37,13 +57,22 @@ const Products = () => {
       })
       .catch(err=>{toast.error(err)});
   };
+  
   useEffect(() => {
     const axios = createApiClient();
     const query = searchQuery.trim() ? `/products/getByName?name=${encodeURIComponent(searchQuery.trim())}` : '/products/all';
     axios.get(query)
-      .then(response => setProductData(response.data))
+      .then(async response => {
+        const products = response.data;
+        const productsWithClassification = await Promise.all(products.map(async (product) => {
+          const classifyResponse = await axios.get(`/products/classify/${product.id}`);
+          return { ...product, classify: classifyResponse.data };
+        }));
+        setProductData(productsWithClassification);
+      })
       .catch(error => console.error('Failed to fetch products:', error));
-  }, [searchQuery]); 
+  }, [searchQuery]);
+
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -64,6 +93,7 @@ const Products = () => {
     { accessorKey: 'name', header: 'Name', muiEditTextFieldProps: { required: true, error: !!validationErrors.name, helperText: validationErrors.name, onFocus: () => setValidationErrors({ ...validationErrors, name: undefined }) } },
     { accessorKey: 'type', header: 'Type', muiEditTextFieldProps: { required: true, error: !!validationErrors.type, helperText: validationErrors.type, onFocus: () => setValidationErrors({ ...validationErrors, type: undefined }) } },
     { accessorKey: 'image', header: 'Image', Cell: ImageCell },
+    { accessorKey: 'classify', header: 'Classify' },
     { accessorKey: 'listPrice', header: 'List Price', muiEditTextFieldProps: { required: true, error: !!validationErrors.listPrice, helperText: validationErrors.listPrice, onFocus: () => setValidationErrors({ ...validationErrors, listPrice: undefined }) } },
   ], [validationErrors]);
 
@@ -170,7 +200,20 @@ const Products = () => {
   return (
     <div>
       <h1 className='font-bold' style={{ fontSize: '30px', textAlign: 'center', marginTop: '8px' }}>Products</h1>
-      <TextField // Search input
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker
+          label="Select Start Date"
+          value={selectedStartDate}
+          onChange={(newValue) => setSelectedStartDate(newValue)}
+          components={{
+            TextField: TextField,
+          }}
+        />
+      </LocalizationProvider>
+      <div style={{ textAlign: 'center', margin: '20px' }}>
+        <strong>Total Profit:</strong> {totalProfit.toLocaleString('vi-VN')} đồng
+      </div>
+      <TextField
         style={{ margin: '20px auto', display: 'block' }}
         placeholder="Search Products"
         value={searchQuery}
