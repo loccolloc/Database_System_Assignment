@@ -86,7 +86,8 @@ Content-Type: application/json
   "type": "Trà sữa",
   "list_price": "30000",
   "discount": "0.0",
-  "state": "unavailable"
+  "state": "unavailable",
+  "image": ""
 }
 
 ###

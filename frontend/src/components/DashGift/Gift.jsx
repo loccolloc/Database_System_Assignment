@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
 
 import {
   MRT_EditActionButtons,
@@ -19,7 +20,7 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Tooltip,InputAdornment,TextField
+  Tooltip,InputAdornment,TextField,Button
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -45,6 +46,8 @@ const Gift = () => {
   const [searchQuery, setSearchQuery] = useState(""); 
   const [showPopup, setShowPopup] = useState(false);
   const [popupImage, setPopupImage] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [editImageFile, setEditImageFile] = useState(null);
 
   const handleClaimGift = (giftId ) => {
     const quantity=1;
@@ -85,60 +88,58 @@ const Gift = () => {
   .then(response => setGiftData(response.data))
   .catch(error => console.error('Failed to fetch products:', error));
 }, [searchQuery]); 
+const handleImageChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImageFile(reader.result.split(',')[1]); // Save base64 string of the image
+    };
+    reader.readAsDataURL(file);
+  }
+};
+const createGift = (newGift) => {
+  const axios = createApiClient();
+  const formData = {
+    name: newGift.name,
+    image: imageFile, // Use the base64 encoded string
+    quantity: newGift.quantity,
+    point: newGift.point
+  };
 
+  axios.post('http://localhost:8080/gifts/post', formData, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+  .then(response => {
+    toast.success("Gift created successfully!");
+    setGiftData(current => [...current, response.data]); // Append the new gift to the current gift data
+    setImageFile(null); // Clear the image file state
+  })
+  .catch(error => {
+    toast.error(`Failed to create gift: ${error.message}`);
+    console.error('Failed to create gift:', error);
+  });
+};
+const handleEditImageChange = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setEditImageFile(reader.result.split(',')[1]); // Ensure you split by ',' and take the second part to avoid 'data:image/*;base64,' prefix
+    };
+    reader.readAsDataURL(file);
+  }
+};
+const columns = useMemo(() => [
+  { accessorKey: 'id', header: 'Id', enableEditing: false, size: 80 },
+  { accessorKey: 'name', header: 'Name', muiEditTextFieldProps: { required: true, error: !!validationErrors.name, helperText: validationErrors.name, onFocus: () => setValidationErrors({ ...validationErrors, name: undefined }) } },
+  { accessorKey: 'point', header: 'Point', muiEditTextFieldProps: { required: true, error: !!validationErrors.point, helperText: validationErrors.point, onFocus: () => setValidationErrors({ ...validationErrors, point: undefined }) } },
+  { accessorKey: 'image', header: 'Image', Cell: ImageCell },
+  { accessorKey: 'quantity', header: 'Quantity', muiEditTextFieldProps: { required: true, error: !!validationErrors.quantity, helperText: validationErrors.quantity, onFocus: () => setValidationErrors({ ...validationErrors, quantity: undefined }) } }
+], [validationErrors]);
 
-  const columns = useMemo(() => [
-    {
-      accessorKey: 'id',
-      header: 'Id',
-      enableEditing: false,
-      size: 80,
-    },
-    {
-      accessorKey: 'name',
-      header: 'name',
-      muiEditTextFieldProps: {
-        required: true,
-        error: !!validationErrors?.name,
-        helperText: validationErrors?.name,
-        onFocus: () => setValidationErrors({
-          ...validationErrors,
-          name: undefined,
-        }),
-      },
-    },
-    {
-      accessorKey: 'point',
-      header: 'Point',
-      muiEditTextFieldProps: {
-        required: true,
-        error: !!validationErrors?.point,
-        helperText: validationErrors?.point,
-        onFocus: () => setValidationErrors({
-          ...validationErrors,
-          point: undefined,
-        }),
-      },
-    },
-    {
-      accessorKey: 'image',
-      header: 'Image',
-      Cell: ImageCell,
-    },
-    {
-      accessorKey: 'quantity',
-      header: 'Quantity',
-      muiEditTextFieldProps: {
-        required: true,
-        error: !!validationErrors?.point,
-        helperText: validationErrors?.point,
-        onFocus: () => setValidationErrors({
-          ...validationErrors,
-          point: undefined,
-        }),
-      },
-    },
-  ], [validationErrors]);
 
   const table = useMaterialReactTable({
     columns,
@@ -147,25 +148,42 @@ const Gift = () => {
     editDisplayMode: 'modal',
     enableEditing: true,
     getRowId: (row) => row.id,
-    muiToolbarAlertBannerProps: {
-      color: 'error',
-      children: 'Sample error message (simulated)',
-    },
-    muiTableContainerProps: {
-      sx: { minHeight: '500px' },
-    },
     onCreatingRowCancel: () => setValidationErrors({}),
-    onCreatingRowSave: ({ values }) => console.log('Create action', values), 
+    onCreatingRowSave: ({ values }) => createGift(values),
     onEditingRowCancel: () => setValidationErrors({}),
-    onEditingRowSave: ({ values }) => console.log('Edit action', values), 
-    renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
+    onEditingRowSave: ({ values }) => {
+      
+      console.log("values:", values);
+      const formData = {
+        name: values.name,
+        quantity: values.quantity,
+        point: values.point,
+        image: editImageFile, // include the base64 image
+      };
+    
+      const axios = createApiClient();
+      axios.put(`http://localhost:8080/gifts/put`, formData, {  // Adjusted endpoint to match the provided API example
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then((response) =>{ 
+        toast.success("Gift updated!");
+        console.log('Gift updated:', response.data);})
+      .catch((error) =>{ 
+        toast.error("Failed to update Gift!");
+
+        console.error('Failed to update product:', error);});
+    },    renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-         
-        
-        <DialogContent
-          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-        >
+        <DialogTitle variant="h3">Create New Gift</DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {internalEditComponents}
+          <TextField
+            type="file"
+            onChange={handleImageChange}
+            inputProps={{ accept: 'image/*' }}
+          />
         </DialogContent>
         <DialogActions>
           <MRT_EditActionButtons variant="text" table={table} row={row} />
@@ -174,11 +192,17 @@ const Gift = () => {
     ),
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Edit User</DialogTitle>
+      
+        <DialogTitle variant="h3">Edit Gift</DialogTitle>
         <DialogContent
           sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
         >
           {internalEditComponents}
+          <TextField
+            type="file"
+            onChange={handleEditImageChange}
+            inputProps={{ accept: 'image/*' }}
+          />
         </DialogContent>
         <DialogActions>
           <MRT_EditActionButtons variant="text" table={table} row={row} />
@@ -187,6 +211,13 @@ const Gift = () => {
     ),
     renderRowActions: ({ row, table }) => (
       <Box sx={{ display: 'flex', gap: '1rem' }}>
+         {role !== "user" && (
+         <Tooltip title="Edit">
+          <IconButton onClick={() => table.setEditingRow(row)}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+         )}
        {role !== "admin" && (
           <>
         <Tooltip title="Claim">
@@ -215,7 +246,9 @@ const Gift = () => {
 
       </Box>
     ),
-   
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Button variant="contained" onClick={() => table.setCreatingRow(true)}>Create New Gift</Button>
+    ),
   });
 
   return<div>
