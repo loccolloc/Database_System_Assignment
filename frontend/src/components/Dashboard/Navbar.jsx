@@ -74,11 +74,11 @@ function NavbarProducts() {
           </div>
         </div>
  
-        <div className="nav-links w-full">
+        <div className="nav-links w-full hover-effect" onClick={() => navigate('/receive')}>
           <div className="flex space-x-3 w-full p-2 rounded">
             <ArrowLeftRightIcon />
             <span className={!isExpanded ? "hidden" : "block"}>
-              Transactions
+              Available gifts
             </span>
           </div>
         </div>

@@ -19,6 +19,7 @@ import Invoice from "../src/components/Invoice/Invoice.jsx";
 import ProductDetail from "../src/components/ProductDetail/ProductDetail.jsx";
 import Profile from "../src/components/Profile/Profile.jsx";
 import Thanks from "../src/components/Thanks/Thanks.jsx";
+import DashReceive from "./components/DashReceive/DashReceive.jsx";
 
 import ProtectedRoute from './ProtectedRoute'; 
 
@@ -46,6 +47,7 @@ const App = () => {
 
           <Route path="/listproducts" element={<ListProducts />} />
           <Route path="/gift" element={<ProtectedRoute><DashGift /></ProtectedRoute>} />
+          <Route path="/receive" element={<ProtectedRoute><DashReceive /></ProtectedRoute>} />
           <Route path="/cart" element={<ProtectedRoute blockRole="admin"><Cart /></ProtectedRoute>} />
           <Route path="/invoice" element={<ProtectedRoute><Invoice /></ProtectedRoute>} />
           <Route path="/detail/:id" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />

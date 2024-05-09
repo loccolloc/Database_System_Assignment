@@ -19,7 +19,7 @@ const variants = {
   nonexpanded: { width: "6%" },
 };
 
-function NavbarGifts() {
+function NavbarReceive() {
   const role = window.localStorage.getItem('role');
 
   const [isExpanded, setIsExpanded] = useState(true);
@@ -66,18 +66,18 @@ function NavbarGifts() {
             </div>
           </div>
         )}
-        <div className="nav-links w-full">
-        <div className="flex space-x-3 w-full p-2 rounded bg-blue-800 text-white ">
+        <div className="nav-links w-full hover-effect" onClick={() => navigate('/gift')}>
+        <div className="flex space-x-3 w-full p-2 rounded   ">
             <BarChart3Icon />
             <span className={!isExpanded ? "hidden" : "block"}>Gift</span>
           </div>
         </div>
 
-        <div className="nav-links w-full hover-effect"  onClick={() => navigate('/receive')}>
-          <div className="flex space-x-3 w-full p-2 rounded">
+        <div className="nav-links w-full">
+          <div className="flex space-x-3 w-full p-2 rounded bg-blue-800 text-white">
             <ArrowLeftRightIcon />
             <span className={!isExpanded ? "hidden" : "block"}>
-              Available gifts
+Available gifts
             </span>
           </div>
         </div>
@@ -95,4 +95,4 @@ function NavbarGifts() {
   );
 }
 
-export default NavbarGifts;
+export default NavbarReceive;
