@@ -242,3 +242,11 @@ PUT http://localhost:8080/login/changeInfo?
     id=3&
     name=kng&
     displayName=kng
+
+###
+GET http://localhost:8080/products/classify/3
+
+###
+GET http://localhost:8080/products/calculateTotalProfitByDate?
+    start_date=30-04-2024 00:00:00&
+    end_date=09-05-2024 00:00:00

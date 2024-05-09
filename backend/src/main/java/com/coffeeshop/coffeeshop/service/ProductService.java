@@ -25,4 +25,8 @@ public interface ProductService {
     List<Products> getAllProductsByPriceAsc();
 
     List<Products> getAllProductsByPriceDesc();
+
+    String classifyProducts(int id);
+
+    int calculateTotalProfitByDate(String start_date, String end_date);
 }

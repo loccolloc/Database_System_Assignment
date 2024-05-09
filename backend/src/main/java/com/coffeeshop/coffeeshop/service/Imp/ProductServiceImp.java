@@ -10,6 +10,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.List;
 
@@ -94,5 +97,18 @@ public class ProductServiceImp implements ProductService {
     @Override
     public List<Products> getAllProductsByPriceDesc() {
         return productRepository.findAll(Sort.by("listPrice").descending());
+    }
+
+    @Override
+    public String classifyProducts(int id) {
+        return productRepository.classifyProducts(id);
+    }
+
+    @Override
+    public int calculateTotalProfitByDate(String start_date, String end_date) {
+        return productRepository.calculateTotalProfitByDate(
+                Timestamp.valueOf(LocalDateTime.parse(start_date, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))),
+                Timestamp.valueOf(LocalDateTime.parse(end_date, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")))
+        );
     }
 }
