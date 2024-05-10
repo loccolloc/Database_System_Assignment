@@ -1,9 +1,11 @@
 
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import loginImg from '../../assets/trees.jpg'
 const SIGNUP_URL = 'http://localhost:8080/login/signup';
 import { useState, useEffect, useRef } from "react";
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 export default function Signup() {
     const displayNameRef = useRef();
     const usernameRef = useRef();
@@ -27,6 +29,11 @@ export default function Signup() {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}":;'<>?,.\/]).{6,}$/;
+        if (!passwordRegex.test(password)) {
+            toast.error('Password must be at least 6 characters long and include at least one letter, one number, and one special character.');
+            return;
+        }
         try {
             const response = await axios.post(SIGNUP_URL, {
                 display_name: displayName,
@@ -34,11 +41,19 @@ export default function Signup() {
                 password: password
             });
 
-            console.log(response.data);
+          
 
             if (response.data.data===0) {
+                toast.success("sign up successfully!");
                 navigate('/login'); 
-            }
+            }else if(response.data.data===2)
+                {
+                    toast.error('Username already exists!');
+                }else if(response.data.data===1)
+                    {
+                        toast.error('Please fill out all fields (all fields are required)!');
+
+                    }
         } catch (err) {
             if (!err.response) {
                 console.log(err);
@@ -55,12 +70,14 @@ export default function Signup() {
 
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 h-screen w-full'>
+        
         <div className='hidden sm:block'>
             <img className='w-full h-full object-cover' src={loginImg} alt="" />
         </div>
 
         <div className='bg-gray-100 flex flex-col justify-center'>
         <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+        <ToastContainer />
             <form className='max-w-[400px] w-full mx-auto bg-white p-4'>
                 <h2 className='text-4xl font-bold text-center py-6'>Tây Nguyên Legend</h2>
                 <div className='flex flex-col py-2'>

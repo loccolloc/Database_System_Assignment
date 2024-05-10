@@ -54,7 +54,7 @@ const handleConfirmClick = () => {
              <header>
 
              <h1 className="py-4 px-3 font-bold" style={{ fontSize: '17px' }}> INVOICE </h1>
-             {( order.total_cost) && (    <div style={{marginLeft:'560px'}}>              <button onClick={handleConfirmClick} style={{ fontSize: '17px',background:'black', color:'white', borderRadius:5,padding:'5px' }}> Xác nhận</button>
+             {( order.total_cost) && (    <div style={{marginLeft:'635px'}}>              <button onClick={handleConfirmClick} style={{ fontSize: '17px',background:'black', color:'white', borderRadius:5,padding:'5px' }}> Xác nhận</button>
 </div> )}
 {order ? (
 <address className='mt-3'>
@@ -89,10 +89,7 @@ const handleConfirmClick = () => {
                 <th><span >Date</span></th>
                 <td><span >{order.start_time}</span></td>
               </tr>
-              {/* <tr>
-                <th><span >Amount Due</span></th>
-                <td><span id="prefix" ></span><span></span></td>
-              </tr> */}
+             
               </tbody>
             </table>
 

@@ -6,7 +6,7 @@ const ServicesData = [
     img: Img2,
     name: "Espresso",
     description:
-      "Lorem ipsum dolor sit amet ipsum dolor sit ametipsum dolor sit amet ipsum dolor sit amet.",
+      "Dòng sản phẩm Espresso của chúng tôi là sự kết hợp hoàn hảo giữa hương vị đậm đà và cảm giác mạnh mẽ. Mỗi giọt espresso đều là một hành trình tinh tế đưa bạn đến những hương vị sâu lắng của cà phê. Sự lựa chọn hoàn hảo cho những ai yêu thích hương vị cân đối và hấp dẫn.",
     aosDelay: "100",
   },
   {
@@ -14,7 +14,7 @@ const ServicesData = [
     img: Img2,
     name: "Americano",
     description:
-      "Lorem ipsum dolor sit amet ipsum dolor sit ametipsum dolor sit amet ipsum dolor sit amet",
+      "Với sự kết hợp tinh tế giữa espresso và nước nóng, Americano của chúng tôi mang đến một trải nghiệm cà phê mạnh mẽ nhưng đồng thời cũng mềm mại và dễ uống. Mỗi giọt Americano là sự kết hợp hoàn hảo giữa sự đậm đà và sự mềm mại, tạo nên một ly cà phê đầy sức sống để bạn bắt đầu ngày mới.",
     aosDelay: "300",
   },
   {
@@ -22,7 +22,7 @@ const ServicesData = [
     img: Img2,
     name: "Cappuccino",
     description:
-      "Lorem ipsum dolor sit amet ipsum dolor sit ametipsum dolor sit amet ipsum dolor sit amet",
+      "Cappuccino của chúng tôi là sự hòa quện tinh tế giữa espresso, sữa và bọt sữa nhẹ nhàng. Với lớp bọt sữa mịn màng phủ lên trên, mỗi giọt cappuccino là một tác phẩm nghệ thuật vừa mềm mại vừa đầy đặn hương vị. Sự lựa chọn lý tưởng cho những ai yêu thích sự hài hòa và sự tinh tế trong mỗi ngụm cà phê",
     aosDelay: "500",
   },
 ];
@@ -41,8 +41,8 @@ const Services = () => {
 
           {/* Services Card section  */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-14 md:gap-5 place-items-center">
-            {ServicesData.map((service) => (
-              <div
+            {ServicesData.map((service,key) => (
+              <div key={key}
                 data-aos="fade-up"
                 data-aos-delay={service.aosDelay}
                 className="rounded-2xl bg-white hover:bg-primary hover:text-white relative shadow-xl duration-high group max-w-[300px]"

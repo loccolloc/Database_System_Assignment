@@ -24,7 +24,7 @@ export default function ListProducts() {
     axios.get(query)
       .then(response => {
         setProductData(response.data);
-        setSearchQuery(""); // Clear search query upon fetching
+        setSearchQuery(""); 
       })
       .catch(error => {
         console.error("Failed to fetch products by type:", error);

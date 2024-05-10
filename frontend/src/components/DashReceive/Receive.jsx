@@ -52,9 +52,20 @@ const Receive = () => {
     const axios = createApiClient();
     axios.get(`http://localhost:8080/login/exGifts?account_id=${accountId}&gift_id=${giftId}&quantity=${quantity}`)
       .then(response => {
-        setShowPopup(true);
+        if(response.data===0)
+          {
+            toast.success("Gift exchanged successfully!");
+          }else if(response.data===1)
+            {
+              toast.error("You cannot exchange gift!");
+              return;
+            }
+        // setShowPopup(true);
       })
-      .catch(error => console.error('Error claiming gift:', error));
+      .catch((error) => {
+        
+        toast.error("Claim gift failed!");
+        console.error('Error claiming gift:', error);});
   };
 
   const handleClosePopup = () => {

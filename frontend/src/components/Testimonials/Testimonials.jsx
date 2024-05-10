@@ -4,26 +4,26 @@ import Slider from "react-slick";
 const TestimonialData = [
   {
     id: 1,
-    name: "Dilshad",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
+    name: "Tuong",
+    text: "Đơn hàng của tôi đã được giao đúng hẹn và cà phê thực sự ngon. Sẽ tiếp tục ủng hộ dịch vụ này!",
     img: "https://picsum.photos/101/101",
   },
   {
     id: 2,
-    name: "Sabir ali",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
+    name: "Khoi",
+    text: "Khám phá những hương vị mới mẻ mỗi khi mở gói cà phê từ cửa hàng này. Thật tuyệt vời!",
     img: "https://picsum.photos/102/102",
   },
   {
     id: 3,
-    name: "Dipankar kumar",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
+    name: "Loc",
+    text: "Chất lượng cà phê ổn định và dịch vụ giao hàng nhanh chóng. Rất hài lòng với trải nghiệm của tôi!",
     img: "https://picsum.photos/104/104",
   },
   {
     id: 5,
-    name: "Satya Narayan",
-    text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque reiciendis inventore iste ratione ex alias quis magni at optio",
+    name: "Hung",
+    text: "Giao hàng đúng hẹn và cà phê ngon. Điều này giúp tôi bắt đầu mỗi ngày một cách tốt nhất!",
     img: "https://picsum.photos/103/103",
   },
 ];
