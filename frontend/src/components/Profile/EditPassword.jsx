@@ -34,7 +34,7 @@ export default function EditPassword({ username }) {
         if(res.data.data===0)
         {
 
-          toast.success("Update Password successfully!!!");
+          toast.success("Password changed successfully!");
         }else if(res.data.data===1)
           {
             toast.error("Please fill out all fields (all fields are required)!");
