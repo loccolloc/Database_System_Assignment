@@ -65,6 +65,11 @@ const Info = () => {
           } else {
             toast.warning("Update failed!!!");
           }
+        }).catch((err)=>{
+        
+          toast.error("Gender must be male or female!");
+
+
         });
     
   };
