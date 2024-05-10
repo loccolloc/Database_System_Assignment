@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button, Input } from "@material-tailwind/react";
 import EditPassword from './EditPassword'
-import EditUsername from './EditUsername'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
@@ -17,8 +16,7 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [onEdit, setOnEdit] = useState(false);
-  const [onDelete, setOnDelete] = useState(false);
+
   useEffect(() => {
     
     
@@ -37,7 +35,7 @@ const Profile = () => {
 
    
   const handleDeleteAccount = async () => {
-    console.log("tai khoan se duoc xoa: ",username,password );
+    // console.log("tai khoan se duoc xoa: ",username,password );
     await axios
       .delete(`http://localhost:8080/login/delete?username=${username}&password=${password}`)
       .then((res) => {
@@ -86,7 +84,7 @@ const Profile = () => {
         <div 
         
           className="text-xl md:text-3xl font-semibold"
-          sx={{ m: "0 0 5px 0" }}
+        
         >
           Thông tin người dùng
         </div>

@@ -20,7 +20,7 @@ import ProductDetail from "../src/components/ProductDetail/ProductDetail.jsx";
 import Profile from "../src/components/Profile/Profile.jsx";
 import Thanks from "../src/components/Thanks/Thanks.jsx";
 import DashReceive from "./components/DashReceive/DashReceive.jsx";
-
+import Info from "./components/DashInfo/MainDashboard.jsx"
 import ProtectedRoute from './ProtectedRoute'; 
 
 const App = () => {
@@ -44,7 +44,7 @@ const App = () => {
           <Route path="/dashboard" element={<ProtectedRoute><MainDashboard /></ProtectedRoute>} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/thanks" element={<Thanks />} />
-
+          <Route path="/info" element={<ProtectedRoute><Info /></ProtectedRoute>} />
           <Route path="/listproducts" element={<ListProducts />} />
           <Route path="/gift" element={<ProtectedRoute><DashGift /></ProtectedRoute>} />
           <Route path="/receive" element={<ProtectedRoute><DashReceive /></ProtectedRoute>} />

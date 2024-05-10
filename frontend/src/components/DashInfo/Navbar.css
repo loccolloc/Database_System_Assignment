@@ -1,0 +1,7 @@
+.hover-effect {
+    cursor: pointer; /* Đảm bảo cursor chuyển thành pointer khi hover */
+  }
+  
+  .hover-effect:hover {
+    background-color:#1E40AF; 
+  }

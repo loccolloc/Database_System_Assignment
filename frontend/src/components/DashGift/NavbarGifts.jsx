@@ -82,11 +82,11 @@ function NavbarGifts() {
           </div>
         </div>
      )}
-        <div className="nav-links w-full">
+        <div className="nav-links w-full hover-effect" onClick={() => navigate('/info')}>
           <div className="flex space-x-3 w-full p-2 rounded  ">
             <HelpCircleIcon />
             <span className={!isExpanded ? "hidden" : "block"}>
-              Help Center
+             Info
             </span>
           </div>
         </div>
