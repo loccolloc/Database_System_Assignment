@@ -3,11 +3,14 @@ import { Button, Input } from "@material-tailwind/react";
 import EditPassword from './EditPassword'
 import EditUsername from './EditUsername'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 const Profile = () => {
+  const navigate = useNavigate(); 
+
   const id= window.localStorage.getItem('id');
   const uname= window.localStorage.getItem('username');
   const [displayName, setdisplayName] = useState("");
@@ -28,12 +31,8 @@ const Profile = () => {
     });
   }, []);
 
-  const showSuccessMessage = () => {
-    toast.success("DELETE Info successfully!!!");
-  };
-  const showFailMessage = () => {
-    toast.error("delete failed!!!");
-  };
+ 
+
  
 
    
@@ -43,11 +42,18 @@ const Profile = () => {
       .delete(`http://localhost:8080/login/delete?username=${username}&password=${password}`)
       .then((res) => {
         if (res.data.data === 0) {
-          showSuccessMessage(); 
+          toast.success("Delete account successfully!!!");
+          navigate("/signup");
         } else if (res.data.data === 4) {
           toast.error("This account cannot be deleted because an order in progress is currently assigned to the account!");
-        } else {
-          showFailMessage();
+        }else if(res.data.data === 2)
+        {
+          toast.error("Account does not exists!");
+
+        }else if(res.data.data === 3){
+          toast.error("Password incorrect!");
+        }else {
+          toast.error("Delete failed!!!");
         }
       })
       .catch((error) => {

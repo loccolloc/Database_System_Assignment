@@ -35,7 +35,19 @@ export default function EditPassword({ username }) {
         {
 
           toast.success("Update Password successfully!!!");
-        }
+        }else if(res.data.data===1)
+          {
+            toast.error("Please fill out all fields (all fields are required)!");
+
+          }else if(res.data.data===2)
+            {
+              toast.error("Password incorrect!");
+
+            }else if(res.data.data===3)
+              {
+                toast.error("The new password you entered is the same as your old password. Enter a different password!");
+
+              }
         else
         {
           toast.error("Update failed, Your password is incorrect!!!");

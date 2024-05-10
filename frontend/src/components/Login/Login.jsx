@@ -39,7 +39,7 @@ export default function Login() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log("profile: ",response.data);
+            // console.log("profile: ",response.data);
           
             
 

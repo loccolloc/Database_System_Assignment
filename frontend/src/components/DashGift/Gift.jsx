@@ -54,9 +54,21 @@ const Gift = () => {
     const axios = createApiClient();
     axios.get(`http://localhost:8080/login/exGifts?account_id=${accountId}&gift_id=${giftId}&quantity=${quantity}`)
       .then(response => {
-        setShowPopup(true);
+
+        if(response.data===0)
+          {
+            toast.success("Gift exchanged successfully!");
+          }else if(response.data===1)
+            {
+              toast.error("You cannot exchange gift!");
+              return;
+            }
+        // setShowPopup(true);
       })
-      .catch(error => console.error('Error claiming gift:', error));
+      .catch((error) => {
+        
+        toast.error("Claim gift failed!");
+        console.error('Error claiming gift:', error);});
   };
 
   const handleClosePopup = () => {
@@ -93,7 +105,7 @@ const handleImageChange = (event) => {
   if (file) {
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImageFile(reader.result.split(',')[1]); // Save base64 string of the image
+      setImageFile(reader.result.split(',')[1]); 
     };
     reader.readAsDataURL(file);
   }
@@ -102,7 +114,7 @@ const createGift = (newGift) => {
   const axios = createApiClient();
   const formData = {
     name: newGift.name,
-    image: imageFile, // Use the base64 encoded string
+    image: imageFile, 
     quantity: newGift.quantity,
     point: newGift.point
   };
@@ -114,8 +126,8 @@ const createGift = (newGift) => {
   })
   .then(response => {
     toast.success("Gift created successfully!");
-    setGiftData(current => [...current, response.data]); // Append the new gift to the current gift data
-    setImageFile(null); // Clear the image file state
+    setGiftData(current => [...current, response.data]); 
+    setImageFile(null); 
   })
   .catch(error => {
     toast.error(`Failed to create gift: ${error.message}`);
@@ -127,7 +139,7 @@ const handleEditImageChange = (event) => {
   if (file) {
     const reader = new FileReader();
     reader.onloadend = () => {
-      setEditImageFile(reader.result.split(',')[1]); // Ensure you split by ',' and take the second part to avoid 'data:image/*;base64,' prefix
+      setEditImageFile(reader.result.split(',')[1]); 
     };
     reader.readAsDataURL(file);
   }
@@ -136,7 +148,7 @@ const columns = useMemo(() => [
   { accessorKey: 'id', header: 'Id', enableEditing: false, size: 80 },
   { accessorKey: 'name', header: 'Name', muiEditTextFieldProps: { required: true, error: !!validationErrors.name, helperText: validationErrors.name, onFocus: () => setValidationErrors({ ...validationErrors, name: undefined }) } },
   { accessorKey: 'point', header: 'Point', muiEditTextFieldProps: { required: true, error: !!validationErrors.point, helperText: validationErrors.point, onFocus: () => setValidationErrors({ ...validationErrors, point: undefined }) } },
-  { accessorKey: 'image', header: 'Image', Cell: ImageCell },
+  { accessorKey: 'image', header: 'Image', Cell: ImageCell,enableEditing: false },
   { accessorKey: 'quantity', header: 'Quantity', muiEditTextFieldProps: { required: true, error: !!validationErrors.quantity, helperText: validationErrors.quantity, onFocus: () => setValidationErrors({ ...validationErrors, quantity: undefined }) } }
 ], [validationErrors]);
 
@@ -158,11 +170,11 @@ const columns = useMemo(() => [
         name: values.name,
         quantity: values.quantity,
         point: values.point,
-        image: editImageFile, // include the base64 image
+        image: editImageFile, 
       };
     
       const axios = createApiClient();
-      axios.put(`http://localhost:8080/gifts/put`, formData, {  // Adjusted endpoint to match the provided API example
+      axios.put(`http://localhost:8080/gifts/put`, formData, {  
         headers: {
           'Content-Type': 'application/json',
         }
