@@ -18,7 +18,7 @@ import { TextFields } from '@mui/icons-material';
 const ImageCell = ({ cell }) => {
   const imageSrc = cell.getValue();
   if (!imageSrc) {
-    return <span>No image</span>; // Or render a placeholder image
+    return <span>No image</span>; 
   }
   return (
     <img src={`data:image/png;base64,${imageSrc}`} alt="Product" style={{ width: '100px', height: 'auto' }} />
@@ -86,7 +86,7 @@ const Products = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImageFile(reader.result.split(',')[1]); // Save base64 string of the image
+        setImageFile(reader.result.split(',')[1]); 
       };
       reader.readAsDataURL(file);
     }
@@ -97,9 +97,9 @@ const Products = () => {
       name: newProduct.name,
       type: newProduct.type,
       list_price: newProduct.listPrice,
-      discount: newProduct.discount || 0.0, // Set a default value if discount is not provided
-      state: newProduct.state || "available", // Set a default state if not provided
-      image: imageFile // Use the base64 encoded string
+      discount: newProduct.discount || 0.0, 
+      state: newProduct.state || "available", 
+      image: imageFile 
     };
 
     axios.post(`http://localhost:8080/products/post`, formData, {
@@ -109,8 +109,8 @@ const Products = () => {
     })
     .then(response => {
       toast.success("Product created successfully!");
-      setProductData(current => [...current, response.data]); // Append the new product to the current product data
-      setImageFile(null); // Clear the image file state
+      setProductData(current => [...current, response.data]); 
+      setImageFile(null); 
     })
     .catch(error => {
       toast.error(`Failed to create product: ${error.message}`);
@@ -124,7 +124,7 @@ const Products = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setEditImageFile(reader.result.split(',')[1]); // Ensure you split by ',' and take the second part to avoid 'data:image/*;base64,' prefix
+        setEditImageFile(reader.result.split(',')[1]); 
       };
       reader.readAsDataURL(file);
     }
@@ -135,8 +135,10 @@ const Products = () => {
     { accessorKey: 'id', header: 'Id', enableEditing: false, size: 80 },
     { accessorKey: 'name', header: 'Name', muiEditTextFieldProps: { required: true, error: !!validationErrors.name, helperText: validationErrors.name, onFocus: () => setValidationErrors({ ...validationErrors, name: undefined }) } },
     { accessorKey: 'type', header: 'Type', muiEditTextFieldProps: { required: true, error: !!validationErrors.type, helperText: validationErrors.type, onFocus: () => setValidationErrors({ ...validationErrors, type: undefined }) } },
-    { accessorKey: 'image', header: 'Image', Cell: ImageCell },
-    { accessorKey: 'classify', header: 'Classify' },
+    { accessorKey: 'image', header: 'Image', Cell: ImageCell,enableEditing: false },
+    { accessorKey: 'classify', header: 'Classify',enableEditing: false, },
+    { accessorKey: 'discount', header: 'Discount' },
+    { accessorKey: 'state', header: 'State' },
     { accessorKey: 'listPrice', header: 'List Price', muiEditTextFieldProps: { required: true, error: !!validationErrors.listPrice, helperText: validationErrors.listPrice, onFocus: () => setValidationErrors({ ...validationErrors, listPrice: undefined }) } },
   ], [validationErrors]);
 
@@ -158,13 +160,13 @@ const Products = () => {
         name: values.name,
         type: values.type,
         list_price: values.listPrice,
-        discount: "0.0",  // Assuming a static discount for demonstration
-        state: "unavailable",  // Assuming a static state for demonstration
-        image: editImageFile, // include the base64 image
+        discount: values.discount,  
+        state: values.state,  
+        image: editImageFile, 
       };
     
       const axios = createApiClient();
-      axios.put(`http://localhost:8080/products/put`, formData, {  // Adjusted endpoint to match the provided API example
+      axios.put(`http://localhost:8080/products/put`, formData, {  
         headers: {
           'Content-Type': 'application/json',
         }
@@ -239,7 +241,7 @@ const Products = () => {
   return (
     <div>
       <h1 className='font-bold' style={{ fontSize: '30px', textAlign: 'center', marginTop: '8px' }}>Products</h1>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider style={{marginTop:'20px'}} dateAdapter={AdapterDayjs}>
         <DatePicker
           label="Select Start Date"
           value={selectedStartDate}
@@ -250,7 +252,7 @@ const Products = () => {
         />
       </LocalizationProvider>
       <div style={{ textAlign: 'center', margin: '20px' }}>
-        <strong>Total Profit:</strong> {totalProfit.toLocaleString('vi-VN')} đồng
+        <strong style={{fontSize:'20px'}}>Total Profit: {totalProfit.toLocaleString('vi-VN')} đồng</strong>
       </div>
       <TextField
         style={{ margin: '20px auto', display: 'block' }}

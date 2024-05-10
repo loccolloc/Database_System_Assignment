@@ -44,6 +44,18 @@ export default function QuantityEdit() {
                
             });
     }, [id]);
+    const deleteAllProducts = () => {
+        axios.delete(`http://localhost:8080/order/delete/${order.id}`)
+            .then(response => {
+                setOrderDetails([]); 
+                setOrder(prevOrder => ({ ...prevOrder, total_cost: 0 })); 
+                toast.success("All item deleted successfully!");
+            })
+            .catch(error => {
+                console.error('Error deleting all products:', error);
+                toast.error('Error deleting all items');
+            });
+    };
     const deleteProduct = (product_id) => {
         axios.put('http://localhost:8080/order/removeProduct', {
             order_id: order.id,
@@ -127,6 +139,8 @@ export default function QuantityEdit() {
                                                 <MDBTypography tag="h1" className="font-bold fw-bold mb-0 text-black">
                                                     Shopping Cart
                                                 </MDBTypography>
+                                                <MDBBtn color="danger" onClick={deleteAllProducts}>Delete All</MDBBtn>
+
                                                 <MDBTypography className="font-bold mb-0 text-muted">
                                                     {orderDetails.length} items
                                                 </MDBTypography>
@@ -134,8 +148,7 @@ export default function QuantityEdit() {
         
                                             <hr className="my-4" />
         
-                                            {/* Products List - Example product */}
-                                          {/* Products List from API */}
+                                         
                                           {orderDetails.map((item, index) => (
                                                 <MDBRow key={index} className="mb-4 d-flex justify-content-between align-items-center">
                                                     <MDBCol md="2" lg="2" xl="2">
@@ -144,6 +157,17 @@ export default function QuantityEdit() {
                                                             
                                                             fluid className="rounded-3" alt={item.product_name} />
                                                     </MDBCol>
+                                                    <MDBCol md="1" lg="1" xl="1" className="text-end">
+    <button className="btn p-0 border-0 bg-transparent delete-button" onClick={(e) => {
+        e.stopPropagation();
+        deleteProduct(item.product_id);
+    }}>
+        <a href="#!" className="text-muted">
+            <MDBIcon fas icon="times" />
+        </a>
+    </button>
+</MDBCol>
+
                                                     <MDBCol md="3" lg="3" xl="3">
                                                         <MDBTypography tag="h6" className="text-muted font-bold">
                                                             {item.category}

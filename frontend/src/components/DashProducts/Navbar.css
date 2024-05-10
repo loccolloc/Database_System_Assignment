@@ -1,7 +1,7 @@
 .hover-effect {
-    cursor: pointer; /* Đảm bảo cursor chuyển thành pointer khi hover */
+    cursor: pointer; 
   }
   
   .hover-effect:hover {
-    background-color: #FF8C8C; /* Màu nền khi hover */
+    background-color: #FF8C8C; 
   }

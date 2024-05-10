@@ -100,7 +100,7 @@ const Footer = () => {
               268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh
               </h1>
               <div>
-                <p className="mb-3">Noida , Uttar Pradesh</p>
+                <p className="mb-3">Ho Chi Minh, Viet Nam</p>
                 <p>+91 1234567890</p>
 
                 {/* social links */}
