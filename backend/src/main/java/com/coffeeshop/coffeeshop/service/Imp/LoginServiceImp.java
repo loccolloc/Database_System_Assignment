@@ -1,10 +1,14 @@
 package com.coffeeshop.coffeeshop.service.Imp;
 
 import com.coffeeshop.coffeeshop.dto.AccountsDTO;
+import com.coffeeshop.coffeeshop.dto.CustomerDTO;
 import com.coffeeshop.coffeeshop.entity.Accounts;
+import com.coffeeshop.coffeeshop.entity.Customers;
 import com.coffeeshop.coffeeshop.entity.Gifts;
+import com.coffeeshop.coffeeshop.mapper.DTOMapper;
 import com.coffeeshop.coffeeshop.payload.request.SignUpRequest;
 import com.coffeeshop.coffeeshop.repository.AccountsRepository;
+import com.coffeeshop.coffeeshop.repository.CustomerRepository;
 import com.coffeeshop.coffeeshop.service.LoginService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,10 @@ import java.util.List;
 public class LoginServiceImp implements LoginService {
     @Autowired
     AccountsRepository accountsRepository;
+    @Autowired
+    CustomerRepository customerRepository;
+    @Autowired
+    DTOMapper mapper;
 
     @Override
     public List<AccountsDTO> getAllAccounts() {
@@ -62,7 +70,12 @@ public class LoginServiceImp implements LoginService {
 
     @Override
     public int addAccount(SignUpRequest signUpRequest) {
-        return accountsRepository.addAccount(signUpRequest.getUsername(), signUpRequest.getPassword(), signUpRequest.getDisplay_name());
+        int res = accountsRepository.addAccount(signUpRequest.getUsername(), signUpRequest.getPassword(), signUpRequest.getDisplay_name());
+        if (res != 0) return res;
+        Customers customer = new Customers();
+        customer.setAccount_id(accountsRepository.findByUsername(signUpRequest.getUsername()).getId());
+        customerRepository.save(customer);
+        return 0;
     }
 
     @Override
@@ -104,6 +117,30 @@ public class LoginServiceImp implements LoginService {
             accountsRepository.findById(id).ifPresent(accounts -> {
                 accounts.setUsername(name);
                 accounts.setDisplay_name(displayName);
+            });
+            return 0;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    @Override
+    public CustomerDTO getCusByAccId(int accountId) {
+        Customers customer = customerRepository.findByAccount_id(accountId);
+        if (customer == null) return null;
+        else return mapper.toCustomerDTO(customer);
+    }
+
+    @Override
+    @Transactional
+    public int putCustomer(CustomerDTO customerDTO) {
+        try {
+            customerRepository.findById(customerDTO.getId()).ifPresent(customers -> {
+                customers.setLast_name(customerDTO.getLast_name());
+                customers.setFirst_name(customerDTO.getFirst_name());
+                customers.setGender(customerDTO.getGender());
+                customers.setLocations(customerDTO.getLocations());
+                customers.setPhone_number(customerDTO.getPhone_number());
             });
             return 0;
         } catch (Exception e) {

@@ -27,7 +27,7 @@ public class Customers {
     @Column(name = "phone_number", length = 10)
     private String phone_number;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Accounts account;
     @OneToMany(mappedBy = "customers")

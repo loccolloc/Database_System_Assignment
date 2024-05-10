@@ -1,6 +1,7 @@
 package com.coffeeshop.coffeeshop.service;
 
 import com.coffeeshop.coffeeshop.dto.AccountsDTO;
+import com.coffeeshop.coffeeshop.dto.CustomerDTO;
 import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.payload.request.SignUpRequest;
 
@@ -17,4 +18,8 @@ public interface LoginService {
     int exchangeGifts(int account_id, int gift_id, int quantity);
 
     int changeInfo(int id, String name, String displayName);
+
+    CustomerDTO getCusByAccId(int accountId);
+
+    int putCustomer(CustomerDTO customerDTO);
 }

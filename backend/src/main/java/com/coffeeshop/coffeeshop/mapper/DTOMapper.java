@@ -1,9 +1,6 @@
 package com.coffeeshop.coffeeshop.mapper;
 
-import com.coffeeshop.coffeeshop.dto.OnlineOrderDTO;
-import com.coffeeshop.coffeeshop.dto.OrderDetailDTO;
-import com.coffeeshop.coffeeshop.dto.ProductDTO;
-import com.coffeeshop.coffeeshop.dto.ReviewDTO;
+import com.coffeeshop.coffeeshop.dto.*;
 import com.coffeeshop.coffeeshop.entity.*;
 import com.coffeeshop.coffeeshop.repository.AccountsRepository;
 import com.coffeeshop.coffeeshop.repository.EmployeesRepository;
@@ -125,5 +122,28 @@ public class DTOMapper {
         order.setState("in progress");
         onlineOrder.setOrders(order);
         return onlineOrder;
+    }
+
+    public CustomerDTO toCustomerDTO(Customers customer) {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setId(customer.getId());
+        customerDTO.setAccount_id(customer.getAccount_id());
+        customerDTO.setLast_name(customer.getLast_name());
+        customerDTO.setFirst_name(customer.getFirst_name());
+        customerDTO.setGender(customer.getGender());
+        customerDTO.setLocations(customer.getLocations());
+        customerDTO.setPhone_number(customer.getPhone_number());
+        return customerDTO;
+    }
+
+    public Customers toCustomerEntity(CustomerDTO customerDTO) {
+        Customers customer = new Customers();
+        customer.setAccount_id(customerDTO.getAccount_id());
+        customer.setLast_name(customerDTO.getLast_name());
+        customer.setFirst_name(customerDTO.getFirst_name());
+        customer.setGender(customerDTO.getGender());
+        customer.setLocations(customerDTO.getLocations());
+        customer.setPhone_number(customerDTO.getPhone_number());
+        return customer;
     }
 }

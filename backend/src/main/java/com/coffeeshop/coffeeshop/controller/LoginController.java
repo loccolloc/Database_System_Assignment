@@ -1,6 +1,7 @@
 package com.coffeeshop.coffeeshop.controller;
 
 import com.coffeeshop.coffeeshop.dto.AccountsDTO;
+import com.coffeeshop.coffeeshop.dto.CustomerDTO;
 import com.coffeeshop.coffeeshop.entity.Accounts;
 import com.coffeeshop.coffeeshop.entity.Gifts;
 import com.coffeeshop.coffeeshop.payload.ResponseData;
@@ -88,5 +89,19 @@ public class LoginController {
     @GetMapping("/exGifts")
     public int exchangeGifts(@RequestParam int account_id, @RequestParam int gift_id, @RequestParam int quantity){
         return loginService.exchangeGifts(account_id, gift_id, quantity);
+    }
+
+    @GetMapping("/getCusByAccId")
+    public ResponseEntity<?> getCusByAccId(@RequestParam int account_id){
+        ResponseData responseData = new ResponseData();
+        responseData.setData(loginService.getCusByAccId(account_id));
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
+    @PutMapping("/putCus")
+    public ResponseEntity<?> putCus(@RequestBody CustomerDTO customerDTO){
+        ResponseData responseData = new ResponseData();
+        responseData.setData(loginService.putCustomer(customerDTO));
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 }

@@ -86,7 +86,8 @@ Content-Type: application/json
   "type": "Trà sữa",
   "list_price": "30000",
   "discount": "0.0",
-  "state": "unavailable"
+  "state": "unavailable",
+  "image": ""
 }
 
 ###
@@ -235,7 +236,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/order/delete/7
+DELETE http://localhost:8080/order/delete/8
 
 ###
 PUT http://localhost:8080/login/changeInfo?
@@ -250,3 +251,20 @@ GET http://localhost:8080/products/classify/3
 GET http://localhost:8080/products/calculateTotalProfitByDate?
     start_date=30-04-2024 00:00:00&
     end_date=09-05-2024 00:00:00
+
+###
+GET http://localhost:8080/login/getCusByAccId?
+    account_id=3
+
+###
+PUT http://localhost:8080/login/putCus
+Content-Type: application/json
+
+{
+  "id": 3,
+  "last_name": "k",
+  "first_name": "ng",
+  "gender": "male",
+  "locations": "hcmut",
+  "phone_number": "abcdefghij"
+}

@@ -21,8 +21,8 @@ public class Accounts {
     private String role;
     @Column(name="point")
     private int point = 0;
-    @OneToMany(mappedBy = "account")
-    private List<Customers> customersList;
+    @OneToOne(mappedBy = "account")
+    private Customers customersList;
     @OneToMany(mappedBy = "account")
     private List<Online_orders>online_ordersList;
     @OneToMany(mappedBy = "accounts")
