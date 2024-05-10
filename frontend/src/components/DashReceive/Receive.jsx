@@ -46,11 +46,17 @@ const Receive = () => {
   const [searchQuery, setSearchQuery] = useState(""); 
   const [showPopup, setShowPopup] = useState(false);
   const [popupImage, setPopupImage] = useState("");
-
-  const handleClaimGift = (giftId ) => {
+  const [idGift, setIdGift]=useState(null);
+  const axios = createApiClient();
+  const handleClaimGift = (giftId,name ) => {
+   
+    // console.log("name", name);
+    axios.get(`http://localhost:8080/gifts/getByName?name=${name}`).then((res) => {
+      setIdGift("real id: ", res.data[0].id );
+   });
     const quantity=1;
-    const axios = createApiClient();
-    axios.get(`http://localhost:8080/login/exGifts?account_id=${accountId}&gift_id=${giftId}&quantity=${quantity}`)
+    
+    axios.get(`http://localhost:8080/login/exGifts?account_id=${accountId}&gift_id=${idGift}&quantity=${quantity}`)
       .then(response => {
         if(response.data===0)
           {
@@ -75,7 +81,7 @@ const Receive = () => {
   useEffect(() => {
    
     
-    const axios = createApiClient();
+   
     axios.get(`http://localhost:8080/login/getprofile?username=${username}`).then((res) => {
     
     
@@ -86,6 +92,8 @@ const Receive = () => {
   axios.get(query)
   .then(response => setGiftData(response.data))
   .catch(error => console.error('Failed to fetch products:', error));
+
+  
 }, [searchQuery]); 
 
 
@@ -193,7 +201,7 @@ const Receive = () => {
           <>
         <Tooltip title="Claim">
         {((point >= row.original.point)&& row.original.quantity>0 ) && (
-          <IconButton  color="black" onClick={() => handleClaimGift(row.original.id)}>
+          <IconButton  color="black" onClick={() => handleClaimGift(row.original.id,row.original.name)}>
           <i style={{ fontSize: '30px', textAlign:'center' }}  className="text-center fa fa-hand-paper"></i>
           </IconButton>
             )}
