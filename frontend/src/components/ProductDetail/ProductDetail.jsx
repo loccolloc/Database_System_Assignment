@@ -4,7 +4,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { BiShoppingBag } from "react-icons/bi";
 import ReactImageGallery from "react-image-gallery";
 import Rater from "react-rater";
-import axios from 'axios';  // Import axios here
+import axios from 'axios';  
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "react-rater/lib/react-rater.css";
@@ -337,7 +337,7 @@ if(existingProduct)
     setScore(newValue);
   }}
 />
-                                    {/* <Rating name="half-rating" defaultValue={5} precision={1} /> */}
+                               
                                 </div>
 
                                 <textarea

@@ -4,7 +4,7 @@ import Hcmut from "../../assets/website/hcmutlog.png";
 import { useNavigate } from 'react-router-dom'; 
 import { FaPowerOff } from "react-icons/fa";
 import { FaUserAlt } from "react-icons/fa";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 const Menu = [
   {
@@ -16,7 +16,7 @@ const Menu = [
  
 ];
 const Navbar = () => {
-  const [order, setOrder] = useState({});
+ 
   const role = window.localStorage.getItem('role');
   const id= window.localStorage.getItem('id');
 
@@ -55,12 +55,12 @@ const Navbar = () => {
                  
                   
         }else{
-          console.log("du lieu khoong rong");
+         
           navigate('/cart'); 
         }
     })
     .catch(error => {
-        console.log("dia chi khong co", error);
+        console.log("error:", error);
         // postNewOrder();
        
     });

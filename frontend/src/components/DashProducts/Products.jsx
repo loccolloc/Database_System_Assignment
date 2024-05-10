@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import createApiClient from "../../api/axios";
 import { MRT_EditActionButtons, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip,Stack , TextField ,InputAdornment} from '@mui/material';
+import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton, Tooltip , TextField ,InputAdornment} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from "react-toastify";
@@ -46,7 +46,7 @@ const Products = () => {
     axios.get(`http://localhost:8080/products/calculateTotalProfitByDate?start_date=${startDate}&end_date=${endDate}`)
       .then(response => {
         setTotalProfit(response.data);
-        toast.success("Total Profit updated!");
+       
       })
       .catch(err => {
         toast.error("Failed to fetch total profit: " + err.message);
@@ -139,8 +139,17 @@ const Products = () => {
     { accessorKey: 'classify', header: 'Classify',enableEditing: false, },
     { accessorKey: 'discount', header: 'Discount' },
     { accessorKey: 'state', header: 'State' },
-    { accessorKey: 'listPrice', header: 'List Price', muiEditTextFieldProps: { required: true, error: !!validationErrors.listPrice, helperText: validationErrors.listPrice, onFocus: () => setValidationErrors({ ...validationErrors, listPrice: undefined }) } },
-  ], [validationErrors]);
+    {
+      accessorKey: 'listPrice', 
+      header: 'List Price', 
+      muiEditTextFieldProps: { 
+        required: true, 
+        error: !!validationErrors.listPrice, 
+        helperText: validationErrors.listPrice, 
+        onFocus: () => setValidationErrors({ ...validationErrors, listPrice: undefined }) 
+      },
+      Cell: ({ row }) => `${row.original.listPrice.toLocaleString('vi-VN')} đồng`
+    },  ], [validationErrors]);
 
   const table = useMaterialReactTable({
     columns,
@@ -245,7 +254,10 @@ const Products = () => {
         <DatePicker
           label="Select Start Date"
           value={selectedStartDate}
-          onChange={(newValue) => setSelectedStartDate(newValue)}
+          onChange={(newValue) =>{ setSelectedStartDate(newValue);
+
+            toast.success("Total Profit updated!");
+          }}
           components={{
             TextField: TextField,
           }}

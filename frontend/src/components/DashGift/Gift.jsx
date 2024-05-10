@@ -147,7 +147,7 @@ const handleEditImageChange = (event) => {
 const columns = useMemo(() => [
   { accessorKey: 'id', header: 'Id', enableEditing: false, size: 80 },
   { accessorKey: 'name', header: 'Name', muiEditTextFieldProps: { required: true, error: !!validationErrors.name, helperText: validationErrors.name, onFocus: () => setValidationErrors({ ...validationErrors, name: undefined }) } },
-  { accessorKey: 'point', header: 'Point', muiEditTextFieldProps: { required: true, error: !!validationErrors.point, helperText: validationErrors.point, onFocus: () => setValidationErrors({ ...validationErrors, point: undefined }) } },
+  { accessorKey: 'point', header: 'Point', muiEditTextFieldProps: { required: true, error: !!validationErrors.point, helperText: validationErrors.point, onFocus: () => setValidationErrors({ ...validationErrors, point: undefined }) }, Cell: ({ row }) => `${row.original.point.toLocaleString('vi-VN')} ` },
   { accessorKey: 'image', header: 'Image', Cell: ImageCell,enableEditing: false },
   { accessorKey: 'quantity', header: 'Quantity', muiEditTextFieldProps: { required: true, error: !!validationErrors.quantity, helperText: validationErrors.quantity, onFocus: () => setValidationErrors({ ...validationErrors, quantity: undefined }) } }
 ], [validationErrors]);

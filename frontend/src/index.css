@@ -17,19 +17,19 @@
   animation: spin 40s linear infinite;
 }
 
-/* smooth scrolling */
+
 html {
   scroll-behavior: smooth;
 }
 
 .productRating {
-  display: flex; /* Aligns children (stars) in a row */
-  align-items: center; /* Centers stars vertically within the container */
-  justify-content: flex-start; /* Aligns stars to the start of the container */
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-start; 
 }
 .productSales,
 .productTime {
-  font-size: 1.2rem; /* Keep smaller font size for secondary information */
+  font-size: 1.2rem; 
   color: var(--color-green-primary);
 }
 .displayStack__1,
@@ -40,17 +40,17 @@ html {
   padding: 0.5rem 0;
 }
 .productPrice {
-  font-size: 1.8rem; /* Slightly larger for visibility */
+  font-size: 1.8rem; 
   color: var(--color-orange-primary);
 }
 .productCard__wishlist {
-  right: 4rem; /* Adjust spacing */
+  right: 4rem; 
   top: 1rem;
 }
 .productCard__fastSelling {
   left: 1rem;
   top: 1rem;
-  color: var(--color-orange-primary); /* Use color instead of fill for icons */
+  color: var(--color-orange-primary); 
 }
 .productCard__cart {
   right: 1rem;
