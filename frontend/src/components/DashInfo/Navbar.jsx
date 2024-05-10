@@ -1,4 +1,5 @@
-import { useState } from "react";
+import  { useState } from "react";
+
 import Logo from "../../assets/website/Coffee-logo-design-on-transparent-background-PNG-removebg-preview.png";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css"
@@ -13,13 +14,12 @@ import { motion } from "framer-motion";
 
 
 import RightArrowIcon from "../../assets/icons/rightArrow.svg";
-
 const variants = {
   expanded: { width: "20%" },
   nonexpanded: { width: "6%" },
 };
 
-function NavbarReceive() {
+function NavbarProducts() {
   const role = window.localStorage.getItem('role');
 
   const [isExpanded, setIsExpanded] = useState(true);
@@ -50,40 +50,41 @@ function NavbarReceive() {
         <img src={Logo} />
         <span className={!isExpanded ? "hidden" : "block"}></span>
       </div>
-      <div className="flex flex-col space-y-8 mt-12">
-        <div className="nav-links w-full" onClick={() => navigate('/Dashboard')}>
-          <div className="flex space-x-3 w-full p-2 rounded  hover-effect ">
+      <div className="flex flex-col space-y-8 mt-12 ">
+        <div className="nav-links w-full hover-effect " onClick={() => navigate('/Dashboard')}>
+          <div className="flex space-x-3 w-full p-2 rounded ">
             <LayoutDashboard />
             <span className={!isExpanded ? "hidden" : "block"}>Dashboard</span>
           </div>
         </div>
 
         {role !== "user" && (
-          <div className="nav-links w-full hover-effect "  onClick={() => navigate('/products')}>
+          <div className="nav-links w-full  "  onClick={() => navigate('/products')}>
             <div className="flex space-x-3 w-full p-2 rounded">
               <Clock4Icon />
               <span className={!isExpanded ? "hidden" : "block"}>Products</span>
             </div>
           </div>
         )}
-        <div className="nav-links w-full hover-effect" onClick={() => navigate('/gift')}>
-        <div className="flex space-x-3 w-full p-2 rounded   ">
+       
+        <div className="nav-links w-full "  onClick={() => navigate('/gift')}> 
+        <div className="flex space-x-3 w-full p-2 rounded  hover-effect ">
             <BarChart3Icon />
             <span className={!isExpanded ? "hidden" : "block"}>Gift</span>
           </div>
         </div>
-
-        <div className="nav-links w-full">
-          <div className="flex space-x-3 w-full p-2 rounded bg-blue-800 text-white">
+        {role !== "admin" && (
+        <div className="nav-links w-full hover-effect" onClick={() => navigate('/receive')}>
+          <div className="flex space-x-3 w-full p-2 rounded">
             <ArrowLeftRightIcon />
             <span className={!isExpanded ? "hidden" : "block"}>
-Available gifts
+              Available gifts
             </span>
           </div>
         </div>
-
-        <div className="nav-links w-full hover-effect" onClick={() => navigate('/info')}>
-          <div className="flex space-x-3 w-full p-2 rounded  ">
+        )}
+        <div className="nav-links w-full">
+          <div className="flex space-x-3 w-full p-2 rounded  bg-blue-800 text-white">
             <HelpCircleIcon />
             <span className={!isExpanded ? "hidden" : "block"}>
              Info
@@ -95,4 +96,4 @@ Available gifts
   );
 }
 
-export default NavbarReceive;
+export default NavbarProducts;

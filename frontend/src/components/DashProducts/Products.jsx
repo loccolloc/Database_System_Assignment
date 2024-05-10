@@ -14,7 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 
 import 'react-toastify/dist/ReactToastify.css';
-import { TextFields } from '@mui/icons-material';
+
 const ImageCell = ({ cell }) => {
   const imageSrc = cell.getValue();
   if (!imageSrc) {
