@@ -46,20 +46,28 @@ const Receive = () => {
   const [searchQuery, setSearchQuery] = useState(""); 
   const [showPopup, setShowPopup] = useState(false);
   const [popupImage, setPopupImage] = useState("");
-  const [idGift, setIdGift]=useState(null);
+  const [idGift, setIdGift]=useState("");
   const axios = createApiClient();
-  const handleClaimGift = (giftId,name ) => {
-   
-    // console.log("name", name);
-    axios.get(`http://localhost:8080/gifts/getByName?name=${name}`).then((res) => {
-      setIdGift("real id: ", res.data[0].id );
-   });
-    const quantity=1;
+  const getPoint =()=>{
+
+    axios.get(`http://localhost:8080/login/getprofile?username=${username}`).then((res) => {
     
-    axios.get(`http://localhost:8080/login/exGifts?account_id=${accountId}&gift_id=${idGift}&quantity=${quantity}`)
+    
+    setPoint(res.data.data[0].point);
+  });
+
+  }
+  const handleClaimGift =  (giftId,name ) => {
+  
+
+     axios.get(`http://localhost:8080/gifts/getByName?name=${name}`).then((res) => {
+      setIdGift(res.data[0].id );
+      // console.log("id treen ",res.data[0].id);
+      axios.get(`http://localhost:8080/login/exGifts?account_id=${accountId}&gift_id=${res.data[0].id}&quantity=${quantity}`)
       .then(response => {
         if(response.data===0)
           {
+            getPoint();
             toast.success("Gift exchanged successfully!");
           }else if(response.data===1)
             {
@@ -72,21 +80,22 @@ const Receive = () => {
         
         toast.error("Claim gift failed!");
         console.error('Error claiming gift:', error);});
+   });
+    const quantity=1;
+    console.log("id tra ve", idGift);
+   
   };
 
   const handleClosePopup = () => {
     setShowPopup(false);
   };
+  
 
   useEffect(() => {
    
-    
+    getPoint();
    
-    axios.get(`http://localhost:8080/login/getprofile?username=${username}`).then((res) => {
     
-    
-    setPoint(res.data.data[0].point);
-  });
   const query = searchQuery.trim() ? `/gifts/getByName?name=${encodeURIComponent(searchQuery.trim())}` : `/login/availableGift?username=${username}`;
 
   axios.get(query)
