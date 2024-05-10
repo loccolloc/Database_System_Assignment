@@ -42,9 +42,7 @@ const Banner = () => {
                   data-aos="fade-up"
                   className="text-sm text-gray-500 tracking-wide leading-5"
                 >
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Eaque reiciendis inventore iste ratione ex alias quis magni at
-                  optio
+                  Vietnam, a land rich in culture and tradition, is also home to some of the finest coffee in the world. With its robust flavors and distinctive brewing methods, Vietnamese coffee offers a unique experience for connoisseurs and newcomers alike. From the smooth and velvety ca phe sua da, served iced with sweetened condensed milk, to the strong and invigorating black brew, each cup promises a journey through the lush highlands of Vietnam, where coffee beans are cultivated with care and passion. Enjoy the deep, aromatic pleasure of Vietnamese coffee, a true treasure from the heart of Southeast Asia.
                 </p>
 
                 <div className="grid grid-cols-2 gap-6">
@@ -78,9 +76,7 @@ const Banner = () => {
                       Tea Lover
                     </h1>
                     <p className="text-sm text-gray-500">
-                      Much like writing code, brewing the perfect cup of tea
-                      requires patience, precision, and a dash of passion to
-                      create a comforting blend of flavors.
+                    Just as coding demands meticulous attention to detail, crafting an ideal cup of tea also involves patience, accuracy, and a touch of enthusiasm, all to conjure a soothing mix of tastes.
                     </p>
                   </div>
                 </div>
