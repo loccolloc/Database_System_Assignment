@@ -1,7 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import createApiClient from "../../api/axios";
-import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from "react-toastify";
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
@@ -57,12 +56,12 @@ const Receive = () => {
   });
 
   }
-  const handleClaimGift =  (giftId,name ) => {
+  const handleClaimGift =  (name ) => {
   
 
      axios.get(`http://localhost:8080/gifts/getByName?name=${name}`).then((res) => {
       setIdGift(res.data[0].id );
-      // console.log("id treen ",res.data[0].id);
+      
       axios.get(`http://localhost:8080/login/exGifts?account_id=${accountId}&gift_id=${res.data[0].id}&quantity=${quantity}`)
       .then(response => {
         if(response.data===0)

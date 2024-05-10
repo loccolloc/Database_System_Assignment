@@ -44,7 +44,7 @@ const AppStore = () => {
                 </a>
               </div>
             </div>
-            {/* Empty div */}
+          
             <div></div>
           </div>
         </div>

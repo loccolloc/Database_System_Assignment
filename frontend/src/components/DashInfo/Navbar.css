@@ -1,5 +1,5 @@
 .hover-effect {
-    cursor: pointer; /* Đảm bảo cursor chuyển thành pointer khi hover */
+    cursor: pointer; 
   }
   
   .hover-effect:hover {
